@@ -1,10 +1,17 @@
+<?php
+    session_start();
+    require_once '../koneksi.php';
+    require_once '../auth.php';
+    requireRole('admin');
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Tambah Jasa</title>
-    <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
         .profile-container {
@@ -60,6 +67,6 @@
     <footer class="bg-dark text-white text-center py-3 mt-4">
         <p class="mb-0">© 2025 Trim Corner. All Rights Reserved.</p>
     </footer>    
-    <script src="../../bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

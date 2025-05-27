@@ -1,20 +1,24 @@
 <?php
     session_start();
-    $nama = $_POST['nama'] ?? NULL;
-    $kategori = $_POST['kategori'] ?? NULL;
-    $harga = $_POST['harga'] ?? NULL;
-    $stok = $_POST['stok'] ?? NULL;
-    $deskripsi = $_POST['deskripsi'] ?? NULL;
-    if (isset($_POST['submit'])) {
-        $target_dir = "data_gambar/"; // Folder penyimpanan
-        $target_file = $target_dir . basename($_FILES["gambar_produk"]["name"]);
+    require_once '../koneksi.php';
+    require_once '../auth.php';
+    requireRole('admin');
+    
+    // $nama = $_POST['nama'] ?? NULL;
+    // $kategori = $_POST['kategori'] ?? NULL;
+    // $harga = $_POST['harga'] ?? NULL;
+    // $stok = $_POST['stok'] ?? NULL;
+    // $deskripsi = $_POST['deskripsi'] ?? NULL;
+    // if (isset($_POST['submit'])) {
+    //     $target_dir = "data_gambar/"; // Folder penyimpanan
+    //     $target_file = $target_dir . basename($_FILES["gambar_produk"]["name"]);
         
-        if (move_uploaded_file($_FILES["gambar_produk"]["tmp_name"], $target_file)) {
-            $gambar_produk = $target_file; // Simpan path gambar untuk digunakan di tabel
-        } else {
-            echo "Gagal mengupload gambar.";
-        }
-    }
+    //     if (move_uploaded_file($_FILES["gambar_produk"]["tmp_name"], $target_file)) {
+    //         $gambar_produk = $target_file; // Simpan path gambar untuk digunakan di tabel
+    //     } else {
+    //         echo "Gagal mengupload gambar.";
+    //     }
+    // }
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +27,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Data Produk</title>
-    <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
         .profile-container {
@@ -86,6 +90,6 @@
         <p class="mb-0">© 2025 Trim Corner. All Rights Reserved.</p>
     </footer>    
 
-    <script src="../../bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

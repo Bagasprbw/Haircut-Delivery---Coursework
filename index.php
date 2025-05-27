@@ -1,3 +1,7 @@
+<?php
+    session_start();
+    require_once 'koneksi.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -23,7 +27,7 @@
           kepercayaan diri. Di sini, setiap potongan <br />rambut adalah karya
           seni, dan setiap pelanggan adalah prioritas utama kami.
         </p>
-        <a href="Feature/booking/index.php" class="btn btn-light px-4 py-2 rounded-pill" role="button">
+        <a href="booking.php" class="btn btn-light px-4 py-2 rounded-pill" role="button">
             Booking Now
         </a>
     </div>

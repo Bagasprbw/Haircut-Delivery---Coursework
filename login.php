@@ -1,14 +1,25 @@
+<?php session_start();
+if (isset($_SESSION['success_message'])) {
+    echo "<script>alert('" . $_SESSION['success_message'] . "');</script>";
+    unset($_SESSION['success_message']);
+} ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <!-- <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/navbar-fixed/">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-    <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
+    <!-- Tambahkan meta tags untuk keamanan -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Login Page">
+    
+    <!-- Load hanya satu versi Bootstrap -->
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    
+    <!-- Tambahkan CSRF token jika diperlukan -->
+    <!-- <meta name="csrf-token" content="<?php // echo $_SESSION['csrf_token']; ?>"> -->
+    
     <style>
         body {
             display: flex;
@@ -16,6 +27,7 @@
             align-items: center;
             min-height: 100vh;
             position: relative;
+            margin: 0; /* Tambahkan ini */
         }
         body::before {
             content: '';
@@ -23,7 +35,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 0.75; /* Atur opacity di sini (0.0 - 1.0) */
+            opacity: 0.75;
             position: absolute;
             top: 0;
             left: 0;
@@ -34,59 +46,87 @@
 
         .login-container {
             background: #e0e0e0;
-            opacity: 0.80;
+            opacity: 0.90; /* Naikkan sedikit opacity */
             padding: 30px;
             border-radius: 10px;
-            width: 490px;
-            max-height: 600px;
-            z-index: 1; /* Pastikan di atas background */
+            width: 100%; /* Responsif */
+            max-width: 490px; /* Batas maksimum */
+            z-index: 1;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1); /* Shadow lebih halus */
         }
 
-        .btn-dark {
-            width: 100%;
+        @media (max-width: 576px) {
+            .login-container {
+                padding: 20px;
+                margin: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container-xl mt-3 mb-5 d-flex flex-column align-items-center">
         <!-- Logo -->
-        <img src="img/Logo-terang.png" alt="Logo" class="mb-3" style="width: 150px;">
+        <img src="img/Logo-terang.png" alt="Logo" class="mb-3" style="width: 150px; height: auto;"> <!-- Tambahkan height auto -->
 
         <!-- Form Login -->
-        <div class="login-container d-flex flex-column justify-content-between shadow">
-            <div>
-                <h4 class="text-center">SIGN IN</h4>
-                <p class="text-center text-muted">Enter your email and password!</p>
-                <hr>
-                <form class="mt-5">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control shadow" id="email" placeholder="Enter your email">
+        <div class="login-container shadow">
+            <!-- Tambahkan pesan error/success dari session -->
+            <?php if (isset($_SESSION['error_message'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <?= htmlspecialchars($_SESSION['error_message']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php unset($_SESSION['error_message']); ?>
+            <?php endif; ?>
+            
+            <?php if (isset($_SESSION['success_message'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?= htmlspecialchars($_SESSION['success_message']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php unset($_SESSION['success_message']); ?>
+            <?php endif; ?>
+
+            <h4 class="text-center">SIGN IN</h4>
+            <p class="text-center text-muted">Enter your username and password!</p>
+            <hr>
+            <form class="mt-4" method="POST" action="Controller/login_controller.php" autocomplete="on">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control shadow" id="username" name="username" 
+                           placeholder="Enter your username" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control shadow" id="password" name="password" 
+                           placeholder="Enter your password" required>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">Remember me</label>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control shadow" id="password" placeholder="Enter your password">
-                    </div>
-                    <div class="row mb-3 mt-4 d-flex">
-                        <div class="col align-self-center">
-                            <a href="#" class="text-muted">Forgot Password?</a>
-                        </div>
-                        <div class="col text-end">
-                            <button type="submit" class="btn btn-dark w-75">Sign In</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <!-- Teks paling bawah -->
-            <div class="text-center mt-5 mx-auto">
-                <a class="me-3 fw-bold" href="index.php">Home</a>
-                <small>Don't have an account yet? <a href="register.php" class="fw-bold">Sign Up</a></small>
+                    <a href="forgot-password.php" class="text-muted">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn btn-dark w-100 py-2 mb-3">Sign In</button>
+            </form>
+            
+            <div class="text-center mt-4">
+                <small>Don't have an account? <a href="register.php" class="fw-bold">Sign Up</a></small>
+                <div class="mt-2">
+                    <a href="index.php" class="text-decoration-none">← Back to Home</a>
+                </div>
             </div>
         </div>
     </div>
     
-    <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Gunakan hanya satu versi Bootstrap JS -->
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Tambahkan untuk toggle password visibility -->
+    <script>
+        // Contoh: Tambahkan fungsi untuk toggle password visibility
+        // Anda bisa implementasi ini dengan icon mata
+    </script>
 </body>
 </html>
-    

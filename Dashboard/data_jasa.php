@@ -1,8 +1,12 @@
 <?php
     session_start();
-    $nama = $_POST['nama'] ?? NULL;
-    $harga = $_POST['harga'] ?? NULL;
-    $deskripsi = $_POST['deskripsi'] ?? NULL;
+    require_once '../koneksi.php';
+    require_once '../auth.php';
+    requireRole('admin');
+    // $nama = $_POST['nama'] ?? NULL;
+    // $harga = $_POST['harga'] ?? NULL;
+    // $deskripsi = $_POST['deskripsi'] ?? NULL;
+    
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -10,7 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Data Jasa</title>
-    <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
         .profile-container {

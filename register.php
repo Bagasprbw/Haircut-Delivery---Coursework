@@ -55,41 +55,29 @@
         <!-- Form Register -->
         <div class="register-container d-flex flex-column justify-content-between shadow">
             <div>
-                <h4 class="text-center">SIGN UP</h4>
-                <p class="text-center text-muted">Enter your details to create your account</p>
-                <hr>
-                <form class="mt-5">
-                    <!-- Name and Telp -->
+                <form method="POST" action="Controller/register_controller.php">
                     <div class="row mb-3">
                         <div class="col">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control shadow" id="name" placeholder="Enter your name">
+                            <input type="text" class="form-control shadow" id="name" name="nama" placeholder="Enter your name">
                         </div>
                         <div class="col">
-                            <label for="telp" class="form-label">Telp</label>
-                            <input type="tel" class="form-control shadow" id="telp" placeholder="Enter your phone number">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="username" class="form-control shadow" id="username" name="username" placeholder="Enter your username">
                         </div>
                     </div>
-
-                    <!-- Address -->
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control shadow" id="address" placeholder="Enter your address">
+                        <input type="text" class="form-control shadow" id="address" name="alamat" placeholder="Enter your address">
                     </div>
-
-                    <!-- Email -->
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control shadow" id="email" placeholder="Enter your email">
-                    </div>
-
-                    <!-- Password -->
+                            <label for="telp" class="form-label">Telp</label>
+                            <input type="tel" class="form-control shadow" id="telp" name="telp" placeholder="Enter your phone number">
+                        </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control shadow" id="password" placeholder="Enter your password">
+                        <input type="password" class="form-control shadow" id="password" name="password" placeholder="Enter your password">
                     </div>
-
-                    <!-- Sign Up Button -->
                     <button type="submit" class="btn btn-dark w-100 mb-3">Sign Up</button>
                 </form>
             </div>

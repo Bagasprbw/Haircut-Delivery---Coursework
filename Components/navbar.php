@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        /* Navbar Start */
+/* Navbar Start */
 .navbar {
     background: transparent;
     transition: backdrop-filter 0.3s ease-in-out, background-color 0.3s ease-in-out;
@@ -111,6 +111,24 @@
             <a class="isi-nav nav-link" href="#product">Product Catalog</a>
           </div>
         </div>
+        <!-- Profil Pengguna Dropdown -->
+        <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+            <div class="dropdown d-flex align-items-center ms-3">
+                <i class="fas fa-user-circle fa-2x text-white me-2"></i>
+                <button class="btn dropdown-toggle text-white" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: transparent; border: none;">
+                    <?= htmlspecialchars($_SESSION['nama']); ?>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="profile.php">Profil</a></li>
+                    <li><a class="dropdown-item" href="pengaturan.php">Pengaturan</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="logout.php">Keluar</a></li>
+                </ul>
+            </div>
+        <?php endif; ?>
+
+
+
         <!-- Tombol Sidebar -->
         <button class="btn btn-light sidebar-toggle-btn" id="desktopSidebarToggle">
           <i class="fas fa-bars"></i>
@@ -122,7 +140,7 @@
         <!-- Sidebar -->
         <div class="desktop-sidebar" id="desktopSidebar">
           <div class="p-3 bg-primary text-white d-flex justify-content-between align-items-center">
-              <h5 class="m-0">Menu Sidebar</h5>
+              <h5 class="m-0">Sidebar Alternative</h5>
               <!-- <button type="button" class="btn-close btn-close-white" id="closeSidebar"></button> -->
           </div>
           <div class="p-3">
@@ -138,8 +156,8 @@
                       </a>
                   </li>
                   <li class="nav-item">
-                      <!-- <a class="nav-link" href="/Feature/membership/membership.php"> -->
-                      <a class="nav-link" href="Feature/membership/paketWithPHP.php">
+                      <!-- <a class="nav-link" href="/membership/membership.php"> -->
+                      <a class="nav-link" href="membership/paketWithPHP.php">
                           <i class="fa-solid fa-crown me-2"></i>Paket Langganan
                       </a>
                   </li>
@@ -149,12 +167,12 @@
                       </a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="Feature/dashboard/tambah_jasa.php">
+                      <a class="nav-link" href="dashboard/tambah_jasa.php">
                         <i class="fa-solid fa-list-check me-2"></i>Tambah Layanan(Jasa)
                       </a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="Feature/dashboard/tambah_produk.php">
+                      <a class="nav-link" href="dashboard/tambah_produk.php">
                         <i class="fa-solid fa-box me-2"></i>Tambah Produk(Katalog)
                       </a>
                   </li>

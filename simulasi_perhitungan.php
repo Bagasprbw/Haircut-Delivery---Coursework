@@ -306,6 +306,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            <!-- menampilkan daftar pesanan (layanan utama) -->
                                 <?php if (!empty($daftar_layanan)): ?>
                                     <?php foreach ($daftar_layanan as $item): ?>
                                         <tr>
@@ -324,6 +325,7 @@
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                                 
+                                <!-- menampilkan daftar pesanan (layanan tambahan) -->
                                 <?php if (!empty($daftar_tambahan)): ?>
                                     <?php foreach ($daftar_tambahan as $item): ?>
                                         <tr>
