@@ -2,7 +2,7 @@
     session_start();
     require_once 'koneksi.php';
     require_once 'auth.php';
-    requireRole('customer');
+    requireRole('Customer');
 ?>
 
 <!DOCTYPE html>
