@@ -3,7 +3,17 @@
     require_once '../koneksi.php';
     require_once '../auth.php';
     requireRole('Admin');
+
+    // Query hitung total data
+    $total_customer = $koneksi->query("SELECT COUNT(*) AS total FROM user WHERE role = 'Customer'")->fetch_assoc()['total'];
+    $total_produk = $koneksi->query("SELECT COUNT(*) AS total FROM produk")->fetch_assoc()['total'];
+    $total_layanan = $koneksi->query("SELECT COUNT(*) AS total FROM layanan")->fetch_assoc()['total'];
+    $total_booking_selesai = $koneksi->query("SELECT COUNT(*) AS total FROM pesanan WHERE status_pesanan = 'Selesai'")->fetch_assoc()['total'];
+    $total_pembelian_selesai = $koneksi->query("SELECT COUNT(*) AS total FROM pembelian WHERE status_pembelian = 'Selesai'")->fetch_assoc()['total'];
+    $total_pendapatan_pesanan = $koneksi->query("SELECT SUM(total_harga) AS total FROM pesanan WHERE status_pesanan = 'Selesai'")->fetch_assoc()['total'] ?? 0;
+    $total_pendapatan_pembelian = $koneksi->query("SELECT SUM(total_harga) AS total FROM pembelian WHERE status_pembelian = 'Selesai'")->fetch_assoc()['total'] ?? 0;
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -172,7 +182,7 @@
             </li>
             
             <li class="nav-item mb-2">
-                <a class="nav-link text-white" href="#"><i class="fas fa-inbox me-2"></i> Ulasan</a>
+                <a class="nav-link text-white" href="data_ulasan.php"><i class="fas fa-inbox me-2"></i> Ulasan</a>
             </li>
         </ul>
         
@@ -215,10 +225,10 @@
                 <div class="col-md-6 col-lg-3 mb-3">
                     <div class="card stat-card">
                         <div class="card-body">
-                            <h5 class="card-title">Total Revenue</h5>
+                            <h5 class="card-title">Total Customer</h5>
                             <div class="d-flex justify-content-between align-items-end">
-                                <h2 class="mb-0">$--</h2>
-                                <span class="text-success small">--%</span>
+                                <h2 class="mb-0"><?= $total_customer ?></h2>
+                                <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
                             </div>
                         </div>
                     </div>
@@ -226,10 +236,10 @@
                 <div class="col-md-6 col-lg-3 mb-3">
                     <div class="card stat-card">
                         <div class="card-body">
-                            <h5 class="card-title">Active Sessions</h5>
+                            <h5 class="card-title">Total Layanan</h5>
                             <div class="d-flex justify-content-between align-items-end">
-                                <h2 class="mb-0">--</h2>
-                                <span class="text-success small">--%</span>
+                                <h2 class="mb-0"><?= $total_layanan ?></h2>
+                                <a href="data_jasa.php" class="text-success"><i class="fas fa-eye"></i></a>
                             </div>
                         </div>
                     </div>
@@ -237,10 +247,10 @@
                 <div class="col-md-6 col-lg-3 mb-3">
                     <div class="card stat-card">
                         <div class="card-body">
-                            <h5 class="card-title">Orders</h5>
+                            <h5 class="card-title">Total Produk</h5>
                             <div class="d-flex justify-content-between align-items-end">
-                                <h2 class="mb-0">--</h2>
-                                <span class="text-success small">--%</span>
+                                <h2 class="mb-0"><?= $total_produk ?></h2>
+                                <a href="data_produk.php" class="text-success"><i class="fas fa-eye"></i></a>
                             </div>
                         </div>
                     </div>
@@ -248,10 +258,44 @@
                 <div class="col-md-6 col-lg-3 mb-3">
                     <div class="card stat-card">
                         <div class="card-body">
-                            <h5 class="card-title">Total Sessions</h5>
+                            <h5 class="card-title">Pesanan(Booking) Selesai</h5>
                             <div class="d-flex justify-content-between align-items-end">
-                                <h2 class="mb-0">--</h2>
-                                <span class="text-success small">--%</span>
+                                <h2 class="mb-0"><?= $total_booking_selesai ?></h2>
+                                <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Pembelian Selesai</h5>
+                            <div class="d-flex justify-content-between align-items-end">
+                                <h2 class="mb-0"><?= $total_pembelian_selesai ?></h2>
+                                <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Pendapatan Pemesanan</h5>
+                            <div class="d-flex justify-content-between align-items-end">
+                                <h4 class="mb-0">Rp <?= number_format($total_pendapatan_pesanan, 0, ',', '.') ?></h4>
+                                <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Pendapatan Pembelian</h5>
+                            <div class="d-flex justify-content-between align-items-end">
+                                <h4 class="mb-0">Rp <?= number_format($total_pendapatan_pembelian, 0, ',', '.') ?></h4>
+                                <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
                             </div>
                         </div>
                     </div>

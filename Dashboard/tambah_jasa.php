@@ -172,7 +172,7 @@
             </li>
             
             <li class="nav-item mb-2">
-                <a class="nav-link text-white" href="#"><i class="fas fa-inbox me-2"></i> Ulasan</a>
+                <a class="nav-link text-white" href="data_ulasan.php"><i class="fas fa-inbox me-2"></i> Ulasan</a>
             </li>
         </ul>
         
@@ -212,10 +212,10 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form action="proses_tambah_jasa.php" method="POST">
+                    <form action="Controller/jasa_controller.php" method="POST" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="form" class="form-label">Nama Layanan</label>
-                            <input type="text" class="form-control" name="nama"  id="form">
+                            <input type="text" class="form-control" name="nama_layanan"  id="form">
                         </div>
                         <div class="mb-3">
                             <label for="form" class="form-label">Kategori</label>
@@ -223,7 +223,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="form" class="form-label">Harga</label>
-                            <input type="number" class="form-control" name="harga"  id="form">
+                            <input type="number" class="form-control" name="harga_layanan"  id="form">
                         </div>
                         <div class="mb-3">
                             <label for="formFile" class="form-label">Gambar</label>

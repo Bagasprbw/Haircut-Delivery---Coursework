@@ -172,7 +172,7 @@
             </li>
             
             <li class="nav-item mb-2">
-                <a class="nav-link text-white" href="#"><i class="fas fa-inbox me-2"></i> Ulasan</a>
+                <a class="nav-link text-white" href="data_ulasan.php"><i class="fas fa-inbox me-2"></i> Ulasan</a>
             </li>
         </ul>
         

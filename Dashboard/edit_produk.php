@@ -3,6 +3,24 @@
     require_once '../koneksi.php';
     require_once '../auth.php';
     requireRole('Admin');
+
+    // Ambil data produk berdasarkan ID
+    if (!isset($_GET['id'])) {
+        header("Location: data_produk.php");
+        exit;
+    }
+
+    $id = $_GET['id'];
+    $stmt = $koneksi->prepare("SELECT * FROM produk WHERE id_produk = ?");
+    $stmt->bind_param("s", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $produk = $result->fetch_assoc();
+
+    if (!$produk) {
+        echo "Produk tidak ditemukan.";
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -10,10 +28,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dashboard | Data Layanan(Jasa)</title>
-    <!-- Bootstrap CSS -->
+    <title>Dashboard | Edit Produk</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         :root {
@@ -136,6 +152,7 @@
     </style>
 </head>
 <body>
+
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header text-center mb-4">
@@ -208,73 +225,56 @@
     <!-- Main Content -->
     <div class="main-content mt-4">
         <div class="container-fluid pt-4">
-            <h1 class="mb-4">Data Layanan(Jasa)</h1>
+            <h1 class="mb-4">Form Edit Produk</h1>
 
             <div class="card">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between mb-2">
-                        <div class="p-2 bd-highlight">
-                            <a href="tambah_jasa.php" class="btn btn-success" type="submit">Tambah Data</a>
+                    <form action="Controller/produk_controller.php" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="id_produk" value="<?= htmlspecialchars($produk['id_produk']) ?>">
+
+                        <div class="mb-3">
+                            <label class="form-label">ID Produk</label>
+                            <input type="text" class="form-control" name="id_produk" value="<?= htmlspecialchars($produk['id_produk']) ?>" disabled>
                         </div>
-                    </div>
-                    <table class="table table-bordered" id="dataTable">
-                        <thead class="table-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">ID Layanan</th>
-                                <th scope="col">Nama</th>
-                                <th scope="col">Kategory</th>
-                                <th scope="col">Harga</th>
-                                <th scope="col">Foto</th>
-                                <th scope="col">Deskripsi</th>
-                                <th scope="col">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $no = 1;
-                            $result = mysqli_query($koneksi, "SELECT * FROM layanan ORDER BY id_layanan ASC");
-                            while ($row = mysqli_fetch_assoc($result)) :
-                            ?>
-                                <tr>
-                                    <th scope="row"><?= $no++ ?></th>
-                                    <td><?= htmlspecialchars($row['id_layanan']) ?></td>
-                                    <td><?= htmlspecialchars($row['nama_layanan']) ?></td>
-                                    <td><?= htmlspecialchars($row['kategori']) ?></td>
-                                    <td><?= number_format($row['harga_layanan'], 0, ',', '.') ?></td>
-                                    <td>
-                                        <?php if (!empty($row['gambar'])) : ?>
-                                            <img src="data_gambar/<?= htmlspecialchars($row['gambar']) ?>" alt="gambar" style="width: 60px; height: 60px;">
-                                        <?php else : ?>
-                                            <em>Tidak ada gambar</em>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td><?= htmlspecialchars($row['deskripsi']) ?></td>
-                                    <td>
-                                        <div class="d-grid gap-2 d-md-block">
-                                            <a href="Controller/jasa_controller.php?hapus_layanan=<?= $row['id_layanan'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus layanan ini?')">Hapus</a>
-                                            <a href="edit_jasa.php?id=<?= $row['id_layanan'] ?>" class="btn btn-primary btn-sm">Edit</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                    </table>
+                        <div class="mb-3">
+                            <label class="form-label">Nama Produk</label>
+                            <input type="text" class="form-control" name="nama_produk" value="<?= htmlspecialchars($produk['nama_produk']) ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Kategori</label>
+                            <input type="text" class="form-control" name="Kategori" value="<?= htmlspecialchars($produk['kategori']) ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Harga</label>
+                            <input type="number" class="form-control" name="harga" value="<?= htmlspecialchars($produk['harga']) ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Stok</label>
+                            <input type="number" class="form-control" name="stok" value="<?= htmlspecialchars($produk['stok']) ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Gambar (upload baru jika ingin mengganti)</label>
+                            <input class="form-control" name="gambar" type="file">
+                            <p class="mt-2">Gambar saat ini: <br><img src="data_gambar/<?= htmlspecialchars($produk['gambar']) ?>" width="150"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Deskripsi</label>
+                            <textarea class="form-control" name="deskripsi" rows="3"><?= htmlspecialchars($produk['deskripsi']) ?></textarea>
+                        </div>
+                        <button type="submit" name="edit_product" class="btn btn-warning">Update Produk</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS (for dropdowns only) -->
+    <!-- JS tetap sama -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script>
-        // Toggle sidebar and overlay for mobile
         document.getElementById('hamburgerBtn').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');
         });
-        
         document.getElementById('overlay').addEventListener('click', function() {
             document.getElementById('sidebar').classList.remove('active');
             document.getElementById('overlay').classList.remove('active');

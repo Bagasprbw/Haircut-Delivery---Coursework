@@ -172,7 +172,7 @@
             </li>
             
             <li class="nav-item mb-2">
-                <a class="nav-link text-white" href="#"><i class="fas fa-inbox me-2"></i> Ulasan</a>
+                <a class="nav-link text-white" href="data_ulasan.php"><i class="fas fa-inbox me-2"></i> Ulasan</a>
             </li>
         </ul>
         
@@ -218,7 +218,7 @@
                         </div>
                     </div>
                     <table class="table table-bordered" id="dataTable">
-                        <thead>
+                        <thead class="table-dark">
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">ID Produk</th>
@@ -254,7 +254,7 @@
                                     <td><?= htmlspecialchars($row['deskripsi']) ?></td>
                                     <td>
                                         <div class="d-grid gap-2 d-md-block">
-                                            <a href="hapus_produk.php?id=<?= $row['id_produk'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</a>
+                                            <a href="Controller/produk_controller.php?hapus_produk=<?= $row['id_produk'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</a>
                                             <a href="edit_produk.php?id=<?= $row['id_produk'] ?>" class="btn btn-primary btn-sm">Edit</a>
                                         </div>
                                     </td>
