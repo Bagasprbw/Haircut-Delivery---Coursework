@@ -208,14 +208,11 @@
     <!-- Main Content -->
     <div class="main-content mt-4">
         <div class="container-fluid pt-4">
-            <h1 class="mb-4">Dashboard</h1>
+            <h1 class="mb-4">Data Produk</h1>
 
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-2">
-                        <div class="p-2 bd-highlight">
-                            <h3 id="hoverable-rows">Data Produk<a class="anchor-link" href="#hoverable-rows"> </a></h3>
-                        </div>
                         <div class="p-2 bd-highlight">
                             <a href="tambah_produk.php" class="btn btn-success" type="submit">Tambah Data</a>
                         </div>
@@ -224,6 +221,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col">ID Produk</th>
                                 <th scope="col">Nama</th>
                                 <th scope="col">Kategory</th>
                                 <th scope="col">Harga</th>
@@ -234,15 +232,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Produk 1</td>
-                                <td>Pomade</td>
-                                <td>20000</td>
-                                <td>20000</td>
-                                <td>foto.png</td>
-                                <td>foto.png</td>
-                            </tr>
+                            <?php
+                            $no = 1;
+                            $result = mysqli_query($koneksi, "SELECT * FROM produk ORDER BY id_produk ASC");
+                            while ($row = mysqli_fetch_assoc($result)) :
+                            ?>
+                                <tr>
+                                    <th scope="row"><?= $no++ ?></th>
+                                    <td><?= htmlspecialchars($row['id_produk']) ?></td>
+                                    <td><?= htmlspecialchars($row['nama_produk']) ?></td>
+                                    <td><?= htmlspecialchars($row['kategori']) ?></td>
+                                    <td><?= number_format($row['harga'], 0, ',', '.') ?></td>
+                                    <td><?= $row['stok'] ?></td>
+                                    <td>
+                                        <?php if (!empty($row['gambar'])) : ?>
+                                            <img src="data_gambar/<?= htmlspecialchars($row['gambar']) ?>" alt="gambar" style="width: 60px; height: 60px;">
+                                        <?php else : ?>
+                                            <em>Tidak ada gambar</em>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?= htmlspecialchars($row['deskripsi']) ?></td>
+                                    <td>
+                                        <div class="d-grid gap-2 d-md-block">
+                                            <a href="hapus_produk.php?id=<?= $row['id_produk'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</a>
+                                            <a href="edit_produk.php?id=<?= $row['id_produk'] ?>" class="btn btn-primary btn-sm">Edit</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
                         </tbody>
                     </table>
                 </div>

@@ -208,14 +208,11 @@
     <!-- Main Content -->
     <div class="main-content mt-4">
         <div class="container-fluid pt-4">
-            <h1 class="mb-4">Dashboard</h1>
+            <h1 class="mb-4">Data Layanan</h1>
 
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-2">
-                        <div class="p-2 bd-highlight">
-                            <h3 id="hoverable-rows">Data Layanan<a class="anchor-link" href="#hoverable-rows"> </a></h3>
-                        </div>
                         <div class="p-2 bd-highlight">
                             <a href="tambah_produk.php" class="btn btn-success" type="submit">Tambah Data</a>
                         </div>
@@ -240,7 +237,12 @@
                                 <td>20000</td>
                                 <td>20000</td>
                                 <td>foto.png</td>
-                                <td>foto.png</td>
+                                <td>
+                                    <div class="d-grid gap-2 d-md-block">
+                                        <a href="" class="btn btn-danger btn-sm" type="button">Hapus</a>
+                                        <a href="" class="btn btn-primary btn-sm" type="button">Edit</a>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

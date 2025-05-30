@@ -208,82 +208,37 @@
     <!-- Main Content -->
     <div class="main-content mt-4">
         <div class="container-fluid pt-4">
-            <h1 class="mb-4">Dashboard</h1>
-            
-            <!-- Stats Cards Row -->
-            <div class="row mb-4">
-                <div class="col-md-6 col-lg-3 mb-3">
-                    <div class="card stat-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Revenue</h5>
-                            <div class="d-flex justify-content-between align-items-end">
-                                <h2 class="mb-0">$--</h2>
-                                <span class="text-success small">--%</span>
-                            </div>
+            <h1 class="mb-4">Form Tambah Produk</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    <form action="Controller/produk_controller.php" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="form" class="form-label">Nama Produk</label>
+                            <input type="text" class="form-control" name="nama_produk"  id="form">
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3 mb-3">
-                    <div class="card stat-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Active Sessions</h5>
-                            <div class="d-flex justify-content-between align-items-end">
-                                <h2 class="mb-0">--</h2>
-                                <span class="text-success small">--%</span>
-                            </div>
+                        <div class="mb-3">
+                            <label for="form" class="form-label">Kategori</label>
+                            <input type="text" class="form-control" name="Kategori"  id="form">
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3 mb-3">
-                    <div class="card stat-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Orders</h5>
-                            <div class="d-flex justify-content-between align-items-end">
-                                <h2 class="mb-0">--</h2>
-                                <span class="text-success small">--%</span>
-                            </div>
+                        <div class="mb-3">
+                            <label for="form" class="form-label">Harga</label>
+                            <input type="number" class="form-control" name="harga"  id="form">
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3 mb-3">
-                    <div class="card stat-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Sessions</h5>
-                            <div class="d-flex justify-content-between align-items-end">
-                                <h2 class="mb-0">--</h2>
-                                <span class="text-success small">--%</span>
-                            </div>
+                        <div class="mb-3">
+                            <label for="form" class="form-label">Stok</label>
+                            <input type="number" class="form-control" name="stok"  id="form">
                         </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Charts Row -->
-            <div class="row">
-                <div class="col-lg-8 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Orders Over Time</h5>
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Gambar</label>
+                            <input class="form-control" name="gambar" type="file" id="formFile">
                         </div>
-                        <div class="card-body">
-                            <div class="text-center py-5 text-muted">
-                                Chart will be displayed here
-                            </div>
+                        <div class="mb-3">
+                            <label for="form" class="form-label">Deskripsi</label>
+                            <textarea class="form-control" name="deskripsi" id="form" rows="3"></textarea>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Last 7 Days Sales</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="text-center py-5 text-muted">
-                                Sales summary will be displayed here
-                            </div>
-                        </div>
-                    </div>
+                        <button type="submit" name="add_products" class="btn btn-primary">Submit</button>
+                    </form >
                 </div>
             </div>
         </div>
