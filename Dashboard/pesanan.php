@@ -8,7 +8,7 @@
         $pesanan_list = $koneksi->query("SELECT p.*, u.nama AS nama_user FROM pesanan p LEFT JOIN user u ON p.id_user = u.id_user ORDER BY p.waktu DESC");
         $semua_pesanan = $koneksi->query("SELECT COUNT(*) AS total FROM pesanan")->fetch_assoc()['total'];
         $pesanan_selesai = $koneksi->query("SELECT COUNT(*) AS total FROM pesanan WHERE status_pesanan = 'Selesai'")->fetch_assoc()['total'];
-        $pesanan_proses = $koneksi->query("SELECT COUNT(*) AS total FROM pesanan WHERE status_pesanan = 'Diproses'")->fetch_assoc()['total'];
+        // $pesanan_proses = $koneksi->query("SELECT COUNT(*) AS total FROM pesanan WHERE status_pesanan = 'Diproses'")->fetch_assoc()['total'];
         $pesanan_batal = $koneksi->query("SELECT COUNT(*) AS total FROM pesanan WHERE status_pesanan = 'Dibatalkan'")->fetch_assoc()['total'];
     ?>
 
