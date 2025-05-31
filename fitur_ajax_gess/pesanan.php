@@ -5,13 +5,11 @@
         requireRole('Admin');
 
         // Query hitung total data
-        $total_customer = $koneksi->query("SELECT COUNT(*) AS total FROM user WHERE role = 'Customer'")->fetch_assoc()['total'];
-        $total_produk = $koneksi->query("SELECT COUNT(*) AS total FROM produk")->fetch_assoc()['total'];
-        $total_layanan = $koneksi->query("SELECT COUNT(*) AS total FROM layanan")->fetch_assoc()['total'];
-        $total_booking_selesai = $koneksi->query("SELECT COUNT(*) AS total FROM pesanan WHERE status_pesanan = 'Selesai'")->fetch_assoc()['total'];
-        $total_pembelian_selesai = $koneksi->query("SELECT COUNT(*) AS total FROM pembelian WHERE status_pembelian = 'Selesai'")->fetch_assoc()['total'];
-        $total_pendapatan_pesanan = $koneksi->query("SELECT SUM(total_harga) AS total FROM pesanan WHERE status_pesanan = 'Selesai'")->fetch_assoc()['total'] ?? 0;
-        $total_pendapatan_pembelian = $koneksi->query("SELECT SUM(total_harga) AS total FROM pembelian WHERE status_pembelian = 'Selesai'")->fetch_assoc()['total'] ?? 0;
+        $pesanan_list = $koneksi->query("SELECT p.*, u.nama AS nama_user FROM pesanan p LEFT JOIN user u ON p.id_user = u.id_user ORDER BY p.waktu DESC");
+        $semua_pesanan = $koneksi->query("SELECT COUNT(*) AS total FROM pesanan")->fetch_assoc()['total'];
+        $pesanan_selesai = $koneksi->query("SELECT COUNT(*) AS total FROM pesanan WHERE status_pesanan = 'Selesai'")->fetch_assoc()['total'];
+        $pesanan_proses = $koneksi->query("SELECT COUNT(*) AS total FROM pesanan WHERE status_pesanan = 'Diproses'")->fetch_assoc()['total'];
+        $pesanan_batal = $koneksi->query("SELECT COUNT(*) AS total FROM pesanan WHERE status_pesanan = 'Dibatalkan'")->fetch_assoc()['total'];
     ?>
 
 
@@ -20,7 +18,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Dashboard</title>
+        <title>Dashboard | Pesanan</title>
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
         <!-- Font Awesome -->
@@ -218,71 +216,16 @@
         <!-- Main Content -->
         <div class="main-content mt-4">
             <div class="container-fluid pt-4">
-                <h1 class="mb-4">Dashboard</h1>
-                
+                <h1 class="mb-4">Manager Pesanan</h1>
+                 
                 <!-- Stats Cards Row -->
                 <div class="row mb-4">
                     <div class="col-md-6 col-lg-3 mb-3">
                         <div class="card stat-card">
                             <div class="card-body">
-                                <h5 class="card-title">Total Customer</h5>
+                                <h5 class="card-title">Total Orders</h5>
                                 <div class="d-flex justify-content-between align-items-end">
-                                    <h2 class="mb-0"><?= $total_customer ?></h2>
-                                    <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 mb-3">
-                        <div class="card stat-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Layanan</h5>
-                                <div class="d-flex justify-content-between align-items-end">
-                                    <h2 class="mb-0"><?= $total_layanan ?></h2>
-                                    <a href="data_jasa.php" class="text-success"><i class="fas fa-eye"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 mb-3">
-                        <div class="card stat-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Produk</h5>
-                                <div class="d-flex justify-content-between align-items-end">
-                                    <h2 class="mb-0"><?= $total_produk ?></h2>
-                                    <a href="data_produk.php" class="text-success"><i class="fas fa-eye"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 mb-3">
-                        <div class="card stat-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Pesanan(Booking) Selesai</h5>
-                                <div class="d-flex justify-content-between align-items-end">
-                                    <h2 class="mb-0"><?= $total_booking_selesai ?></h2>
-                                    <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 mb-3">
-                        <div class="card stat-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Pembelian Selesai</h5>
-                                <div class="d-flex justify-content-between align-items-end">
-                                    <h2 class="mb-0"><?= $total_pembelian_selesai ?></h2>
-                                    <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 mb-3">
-                        <div class="card stat-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Pendapatan Pemesanan</h5>
-                                <div class="d-flex justify-content-between align-items-end">
-                                    <h4 class="mb-0">Rp <?= number_format($total_pendapatan_pesanan, 0, ',', '.') ?></h4>
+                                    <h4 class="mb-0"><?= number_format($semua_pesanan, 0, ',', '.') ?></h4>
                                     <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
                                 </div>
                             </div>
@@ -292,44 +235,88 @@
                     <div class="col-md-6 col-lg-3 mb-3">
                         <div class="card stat-card">
                             <div class="card-body">
-                                <h5 class="card-title">Pendapatan Pembelian</h5>
+                                <h5 class="card-title">processed</h5>
                                 <div class="d-flex justify-content-between align-items-end">
-                                    <h4 class="mb-0">Rp <?= number_format($total_pendapatan_pembelian, 0, ',', '.') ?></h4>
+                                    <h4 class="mb-0"><?= number_format($pesanan_proses, 0, ',', '.') ?></h4>
+                                    <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Finished</h5>
+                                <div class="d-flex justify-content-between align-items-end">
+                                    <h4 class="mb-0"><?= number_format($pesanan_selesai, 0, ',', '.') ?></h4>
+                                    <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Canceled</h5>
+                                <div class="d-flex justify-content-between align-items-end">
+                                    <h4 class="mb-0"><?= number_format($pesanan_batal, 0, ',', '.') ?></h4>
                                     <a href="user.php" class="text-success"><i class="fas fa-eye"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- nav dan tab -->
+                <div class="row mt-4 mb-4">
+                    <!-- <nav class="nav nav-underline nav-fill">
+                        <a class="nav-link active" aria-current="page" href="#">All</a>
+                        <a class="nav-link text-dark" href="#">Menunggu Konfirmasi <span class="badge text-bg-danger">4</span></a>
+                        <a class="nav-link text-dark" href="#">Menunggu Proses <span class="badge text-bg-danger">4</span></a>
+                        <a class="nav-link text-dark" href="#">Sedang Diproses <span class="badge text-bg-danger">4</span></a>
+                        <a class="nav-link text-success" href="#">Selesai </a>
+                        <a class="nav-link text-danger" href="#">Dibatalkan </a>
+                    </nav><hr> -->
+                    <nav class="nav nav-underline nav-fill mb-3" id="tab-nav">
+                        <a class="nav-link active" href="#" data-status="All">Semua</a>
+                        <a class="nav-link" href="#" data-status="Menunggu Konfirmasi">Menunggu Konfirmasi</a>
+                        <a class="nav-link" href="#" data-status="Dikonfirmasi">Dikonfirmasi</a>
+                        <a class="nav-link" href="#" data-status="Diproses">Diproses</a>
+                        <a class="nav-link" href="#" data-status="Selesai">Selesai</a>
+                        <a class="nav-link" href="#" data-status="Dibatalkan">Dibatalkan</a>
+                    </nav>
+
+                </div>
                 
                 <!-- Charts Row -->
-                <div class="row">
-                    <div class="col-lg-8 mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Orders Over Time</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center py-5 text-muted">
-                                    Chart will be displayed here
-                                </div>
-                            </div>
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Semua Data Pesanan</h5>
                         </div>
-                    </div>
-                    
-                    <div class="col-lg-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Last 7 Days Sales</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center py-5 text-muted">
-                                    Sales summary will be displayed here
-                                </div>
-                            </div>
+                        <div class="card-body table-responsive">
+                            <table class="table table-hover table-bordered align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>Tanggal</th>
+                                        <th>No. Telepon</th>
+                                        <th>Alamat</th>
+                                        <th>Total Harga</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pesanan-body">
+                                    <!-- AJAX akan me-render di sini -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -346,6 +333,31 @@
             document.getElementById('overlay').addEventListener('click', function() {
                 document.getElementById('sidebar').classList.remove('active');
                 document.getElementById('overlay').classList.remove('active');
+            });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                function loadPesanan(status = "All") {
+                    fetch(`pesanan_ajax.php?status=${encodeURIComponent(status)}`)
+                        .then(res => res.text())
+                        .then(html => {
+                            document.getElementById("pesanan-body").innerHTML = html;
+                        });
+                }
+
+                // Default load All
+                loadPesanan();
+
+                // Tab click
+                document.querySelectorAll('#tab-nav .nav-link').forEach(link => {
+                    link.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        document.querySelectorAll('#tab-nav .nav-link').forEach(el => el.classList.remove('active'));
+                        this.classList.add("active");
+                        const status = this.getAttribute("data-status");
+                        loadPesanan(status);
+                    });
+                });
             });
         </script>
     </body>

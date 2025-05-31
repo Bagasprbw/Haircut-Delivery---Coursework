@@ -163,7 +163,7 @@
                 <a class="nav-link text-white" href="#"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
             </li>
             <li class="nav-item mb-2">
-                <a class="nav-link text-white" href="#"><i class="fas fa-tasks me-2"></i> Pesanan</a>    
+                <a class="nav-link text-white" href="pesanan.php"><i class="fas fa-tasks me-2"></i> Pesanan</a>    
             </li>
             <li class="nav-item mb-2">
                 <a class="nav-link text-white" href="#"><i class="fas fa-shopping-cart me-2"></i> Pembelian</a>    
