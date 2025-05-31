@@ -160,7 +160,7 @@
         </div>
         <ul class="nav flex-column px-3">
             <li class="nav-item mb-2">
-                <a class="nav-link text-white" href="#"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+                <a class="nav-link text-white" href="dashboard.php"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
             </li>
             <li class="nav-item mb-2">
                 <a class="nav-link text-white" href="pesanan.php"><i class="fas fa-tasks me-2"></i> Pesanan</a>    

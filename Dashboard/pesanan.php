@@ -151,7 +151,7 @@
             </div>
             <ul class="nav flex-column px-3">
                 <li class="nav-item mb-2">
-                    <a class="nav-link text-white" href="#"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+                    <a class="nav-link text-white" href="dashboard.php"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
                 </li>
                 <li class="nav-item mb-2">
                     <a class="nav-link text-white" href="pesanan.php"><i class="fas fa-tasks me-2"></i> Pesanan</a>    
@@ -298,6 +298,7 @@
                                         <th>Total Harga</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
+                                        <th>Detail</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -321,6 +322,21 @@
                                                 ?>
                                                 <span class="badge bg-<?= $badge ?>"><?= $status ?></span>
                                             </td>
+                                            <td>
+                                                <?php if ($status == 'Menunggu Konfirmasi'): ?>
+                                                    <a href="Controller/pesanan_controller.php?id=<?= $row['id_pesanan'] ?>&aksi=konfirmasi" class="btn btn-sm btn-primary" onclick="return confirm('Yakin ingin konfirmasi pesanan ini?')">Konfirmasi</a>
+                                                <?php elseif ($status == 'Dikonfirmasi'): ?>
+                                                    <a href="Controller/pesanan_controller.php?id=<?= $row['id_pesanan'] ?>&aksi=proses" class="btn btn-sm btn-info" onclick="return confirm('Yakin ingin memproses pesanan ini?')">Proses</a>
+                                                <?php elseif ($status == 'Diproses'): ?>
+                                                    <a href="Controller/pesanan_controller.php?id=<?= $row['id_pesanan'] ?>&aksi=selesai" class="btn btn-sm btn-success" onclick="return confirm('Yakin ingin menyelesaikan pesanan ini?')">Pesanan Selesai</a>
+                                                <?php endif; ?>
+
+                                                <!-- Tombol Cancel selalu tampil -->
+                                                <?php if (!in_array($status, ['Selesai', 'Dibatalkan'])): ?>
+                                                    <a href="Controller/pesanan_controller.php?id=<?= $row['id_pesanan'] ?>&aksi=batal" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin membatalkan pesanan ini?')">Cancel</a>
+                                                <?php endif; ?>
+                                            </td>
+
                                             <td>
                                                 <a href="detail_pesanan.php?id=<?= $row['id_pesanan'] ?>" class="btn btn-sm btn-outline-success" title="Lihat Detail">
                                                     <i class="fas fa-eye"></i> Detail
