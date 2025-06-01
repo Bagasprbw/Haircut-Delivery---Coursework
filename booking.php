@@ -4,8 +4,8 @@ require_once 'koneksi.php';
 require_once 'auth.php';
 requireRole('Customer');
 
-$layanan_utama = mysqli_query($koneksi, "SELECT * FROM layanan WHERE kategori IN ('Rambut', 'Wajah')");
-$layanan_tambahan = mysqli_query($koneksi, "SELECT * FROM layanan WHERE kategori IN ('Relaksasi', 'Paket')");
+$layanan_utama = mysqli_query($koneksi, "SELECT * FROM layanan WHERE kategori != 'Layanan Tambahan' ORDER BY kategori, nama_layanan");
+$layanan_tambahan = mysqli_query($koneksi, "SELECT * FROM layanan WHERE kategori = 'Layanan Tambahan' ORDER BY kategori, nama_layanan");
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -78,7 +78,7 @@ $layanan_tambahan = mysqli_query($koneksi, "SELECT * FROM layanan WHERE kategori
         </div>
         
         <div class="card-body p-4">
-          <form action="hasil_booking.php" method="POST">
+          <form action="Controller/booking_controller.php" method="POST">
             
             <!-- Data Pelanggan -->
             <div class="mb-4">
