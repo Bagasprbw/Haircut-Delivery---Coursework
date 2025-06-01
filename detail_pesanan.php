@@ -95,7 +95,7 @@ function e($str) {
                     <th>No</th>
                     <th>Produk / Layanan</th>
                     <th>Harga Satuan</th>
-                    <th>Jumlah</th>
+                    <!-- <th>Jumlah</th> -->
                     <th>Subtotal</th>
                 </tr>
             </thead>
@@ -116,24 +116,24 @@ function e($str) {
                     <td><?= $no++ ?></td>
                     <td><?= e($item['nama_layanan']) ?></td>
                     <td>Rp <?= number_format($item['harga_layanan'], 0, ',', '.') ?></td>
-                    <td><?= $qty ?></td>
+                    <!-- <td><?= $qty ?></td> -->
                     <td>Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
                 </tr>
                 <?php
                     endwhile;
                 else: ?>
-                <tr><td colspan="5" class="text-center">Tidak ada item pada pesanan ini.</td></tr>
+                <tr><td colspan="4" class="text-center">Tidak ada item pada pesanan ini.</td></tr>
                 <?php endif; ?>
                 <tr>
-                    <td colspan="4" class="text-end"><strong>Total Harga</strong></td>
+                    <td colspan="3" class="text-end"><strong>Total Harga</strong></td>
                     <td><strong>Rp <?= number_format($total, 0, ',', '.') ?></strong></td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="text-end"><strong>Diskon</strong></td>
+                    <td colspan="3" class="text-end"><strong>Diskon</strong></td>
                     <td>Rp <?= number_format($pesanan['diskon'] ?? 0, 0, ',', '.') ?></td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="text-end"><strong>Total Akhir</strong></td>
+                    <td colspan="3" class="text-end"><strong>Total Akhir</strong></td>
                     <td><strong>Rp <?= number_format($pesanan['total_harga'] ?? $total - ($pesanan['diskon'] ?? 0), 0, ',', '.') ?></strong></td>
                 </tr>
             </tbody>
