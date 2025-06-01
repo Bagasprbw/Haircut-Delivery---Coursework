@@ -94,57 +94,61 @@ $layanan_tambahan = mysqli_query($koneksi, "SELECT * FROM layanan WHERE kategori
                   <label for="telepon" class="form-label fw-semibold">Nomor Telepon</label>
                   <input type="tel" class="form-control" id="telepon" name="telepon" placeholder="08123456789" required>
                 </div>
-              </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="alamat" class="form-label fw-semibold">Alamat</label>
+                    <textarea class="form-control" name="alamat" id="alamat" rows="3" placeholder="Masukkan alamat lengkap Anda..." required></textarea>
+                  </div>  
+              </div>  
             </div>
 
             <!-- Layanan Utama -->
-<div class="mb-4">
-  <h5 class="text-primary mb-3">
-    <i class="fas fa-scissors me-2"></i>Pilih Layanan Utama
-  </h5>
-  <div class="row g-3">
-    <?php while ($row = mysqli_fetch_assoc($layanan_utama)): ?>
-      <div class="col-md-4">
-        <div class="card service-card h-100" onclick="toggleService(this, '<?= $row['id_layanan'] ?>')">
-          <div class="card-body">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="layanan[]" id="<?= $row['id_layanan'] ?>" value="<?= $row['nama_layanan'] ?>">
-              <label class="form-check-label fw-semibold" for="<?= $row['id_layanan'] ?>">
-                <?= $row['nama_layanan'] ?> - Rp<?= number_format($row['harga_layanan']) ?>
-              </label>
+            <div class="mb-4">
+              <h5 class="text-primary mb-3">
+                <i class="fas fa-scissors me-2"></i>Pilih Layanan Utama
+              </h5>
+              <div class="row g-3">
+                <?php while ($row = mysqli_fetch_assoc($layanan_utama)): ?>
+                  <div class="col-md-4">
+                    <div class="card service-card h-100" onclick="toggleService(this, '<?= $row['id_layanan'] ?>')">
+                      <div class="card-body">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="layanan[]" id="<?= $row['id_layanan'] ?>" value="<?= $row['nama_layanan'] ?>">
+                          <label class="form-check-label fw-semibold" for="<?= $row['id_layanan'] ?>">
+                            <?= $row['nama_layanan'] ?> - Rp<?= number_format($row['harga_layanan']) ?>
+                          </label>
+                        </div>
+                        <small class="text-muted"><?= $row['deskripsi'] ?></small>
+                      </div>
+                    </div>
+                  </div>
+                <?php endwhile; ?>
+              </div>
             </div>
-            <small class="text-muted"><?= $row['deskripsi'] ?></small>
-          </div>
-        </div>
-      </div>
-    <?php endwhile; ?>
-  </div>
-</div>
 
 
-            <!-- Layanan Tambahan -->
-<div class="mb-4">
-  <h5 class="text-primary mb-3">
-    <i class="fas fa-plus-circle me-2"></i>Layanan Tambahan
-  </h5>
-  <div class="row g-3">
-    <?php while ($row = mysqli_fetch_assoc($layanan_tambahan)): ?>
-      <div class="col-md-4">
-        <div class="card service-card h-100" onclick="toggleService(this, '<?= $row['id_layanan'] ?>')">
-          <div class="card-body">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="layanan_tambahan[]" id="<?= $row['id_layanan'] ?>" value="<?= $row['nama_layanan'] ?>">
-              <label class="form-check-label fw-semibold" for="<?= $row['id_layanan'] ?>">
-                <?= $row['nama_layanan'] ?> - Rp<?= number_format($row['harga_layanan']) ?>
-              </label>
+                        <!-- Layanan Tambahan -->
+            <div class="mb-4">
+              <h5 class="text-primary mb-3">
+                <i class="fas fa-plus-circle me-2"></i>Layanan Tambahan
+              </h5>
+              <div class="row g-3">
+                <?php while ($row = mysqli_fetch_assoc($layanan_tambahan)): ?>
+                  <div class="col-md-4">
+                    <div class="card service-card h-100" onclick="toggleService(this, '<?= $row['id_layanan'] ?>')">
+                      <div class="card-body">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="layanan_tambahan[]" id="<?= $row['id_layanan'] ?>" value="<?= $row['nama_layanan'] ?>">
+                          <label class="form-check-label fw-semibold" for="<?= $row['id_layanan'] ?>">
+                            <?= $row['nama_layanan'] ?> - Rp<?= number_format($row['harga_layanan']) ?>
+                          </label>
+                        </div>
+                        <small class="text-muted"><?= $row['deskripsi'] ?></small>
+                      </div>
+                    </div>
+                  </div>
+                <?php endwhile; ?>
+              </div>
             </div>
-            <small class="text-muted"><?= $row['deskripsi'] ?></small>
-          </div>
-        </div>
-      </div>
-    <?php endwhile; ?>
-  </div>
-</div>
 
 
             <!-- Jadwal Booking -->

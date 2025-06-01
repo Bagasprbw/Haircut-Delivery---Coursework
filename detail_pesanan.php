@@ -2,13 +2,13 @@
 session_start();
 require_once 'koneksi.php';
 
-// Check if user is logged in and role is Customer
+// Cek login & role
 if (empty($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || $_SESSION['role'] !== 'Customer') {
     header('Location: login.php');
     exit();
 }
 
-// Validate order ID parameter
+// Cek ID pesanan
 if (empty($_GET['id'])) {
     die("ID pesanan tidak ditemukan.");
 }
@@ -16,7 +16,7 @@ if (empty($_GET['id'])) {
 $id_pesanan = $_GET['id'];
 $id_user = $_SESSION['id_user'];
 
-// Prepare and execute query to fetch order
+// Ambil data pesanan
 $stmt = $koneksi->prepare("SELECT * FROM pesanan WHERE id_pesanan = ? AND id_user = ?");
 $stmt->bind_param("ss", $id_pesanan, $id_user);
 $stmt->execute();
@@ -26,18 +26,18 @@ if (!$pesanan) {
     die("Pesanan tidak ditemukan.");
 }
 
-// Fetch order details with service info and quantity
-// NOTE: You need to have 'jumlah' column in detail_pesanan for quantity
+// Ambil detail pesanan (pakai LEFT JOIN agar tetap tampil jika layanan sudah dihapus)
 $stmt2 = $koneksi->prepare("
     SELECT dp.*, l.nama_layanan, l.harga_layanan 
     FROM detail_pesanan dp
-    JOIN layanan l ON dp.id_layanan = l.id_layanan
+    LEFT JOIN layanan l ON dp.id_layanan = l.id_layanan
     WHERE dp.id_pesanan = ?
 ");
 $stmt2->bind_param("s", $id_pesanan);
 $stmt2->execute();
 $detail_items = $stmt2->get_result();
 
+// Fungsi aman untuk output HTML
 function e($str) {
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
@@ -75,7 +75,6 @@ function e($str) {
             <strong>Tanggal:</strong> <?= date('d-m-Y', strtotime($pesanan['waktu'])) ?><br>
             <strong>Status:</strong>
             <?php
-                // Bootstrap badge color by status
                 $statusClass = match ($pesanan['status_pesanan']) {
                     'Belum dibayar' => 'bg-danger',
                     'Menunggu Konfirmasi' => 'bg-warning text-dark',
@@ -94,8 +93,7 @@ function e($str) {
                 <tr>
                     <th>No</th>
                     <th>Produk / Layanan</th>
-                    <th>Harga Satuan</th>
-                    <!-- <th>Jumlah</th> -->
+                    <th>Harga</th>
                     <th>Subtotal</th>
                 </tr>
             </thead>
@@ -104,26 +102,35 @@ function e($str) {
                 $no = 1;
                 $total = 0;
 
-                // Check if detail_items has rows
                 if ($detail_items->num_rows > 0):
                     while ($item = $detail_items->fetch_assoc()):
-                        // Use 'jumlah' column, if not present default to 1
                         $qty = isset($item['jumlah']) ? (int)$item['jumlah'] : 1;
-                        $subtotal = $item['harga_layanan'] * $qty;
+
+                        // Fallback jika layanan sudah dihapus
+                        $nama_layanan = $item['nama_layanan'] ?? 'Layanan ini sudah dihapus';
+                        $harga = isset($item['harga_layanan']) ? (int)$item['harga_layanan'] : (int)$item['harga'];
+                        $subtotal = $harga * $qty;
                         $total += $subtotal;
                 ?>
                 <tr>
                     <td><?= $no++ ?></td>
-                    <td><?= e($item['nama_layanan']) ?></td>
-                    <td>Rp <?= number_format($item['harga_layanan'], 0, ',', '.') ?></td>
-                    <!-- <td><?= $qty ?></td> -->
+                    <td>
+                        <?= e($nama_layanan) ?>
+                        <?php if (is_null($item['nama_layanan'])): ?>
+                            <span class="badge bg-danger ms-2">Dihapus</span>
+                        <?php endif; ?>
+                    </td>
+                    <td>Rp <?= number_format($harga, 0, ',', '.') ?></td>
                     <td>Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
                 </tr>
                 <?php
                     endwhile;
-                else: ?>
+                else:
+                ?>
                 <tr><td colspan="4" class="text-center">Tidak ada item pada pesanan ini.</td></tr>
                 <?php endif; ?>
+
+                <!-- Ringkasan -->
                 <tr>
                     <td colspan="3" class="text-end"><strong>Total Harga</strong></td>
                     <td><strong>Rp <?= number_format($total, 0, ',', '.') ?></strong></td>
@@ -134,7 +141,7 @@ function e($str) {
                 </tr>
                 <tr>
                     <td colspan="3" class="text-end"><strong>Total Akhir</strong></td>
-                    <td><strong>Rp <?= number_format($pesanan['total_harga'] ?? $total - ($pesanan['diskon'] ?? 0), 0, ',', '.') ?></strong></td>
+                    <td><strong>Rp <?= number_format($pesanan['total_harga'] ?? ($total - ($pesanan['diskon'] ?? 0)), 0, ',', '.') ?></strong></td>
                 </tr>
             </tbody>
         </table>

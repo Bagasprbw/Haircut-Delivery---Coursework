@@ -18,7 +18,8 @@ $nama       = $_POST['nama'];
 $telepon    = $_POST['telepon'];
 $tanggal    = $_POST['tanggal'];
 $kode_diskon= strtoupper(trim($_POST['diskon'])); // Ubah ke huruf besar
-$catatan    = $_POST['catatan'];
+$catatan    = $_POST['catatan']; //hanya untuk catatan(biar apik tampilannya), tidak disimpan di database
+$alamat    = $_POST['alamat'];
 $pembayaran = $_POST['pembayaran'];
 
 $layanan_utama     = $_POST['layanan'] ?? [];
@@ -59,7 +60,7 @@ $id_pesanan = generateId('PS');
 $sql_pesanan = "INSERT INTO pesanan 
   (id_pesanan, id_user, waktu, nama, alamat, telp, diskon, total_harga, status_pesanan) 
   VALUES 
-  ('$id_pesanan', '$id_user', '$tanggal', '$nama', '', '$telepon', '$nilai_diskon', '$total_harga_setelah_diskon', 'Menunggu Konfirmasi')";
+  ('$id_pesanan', '$id_user', '$tanggal', '$nama', '$alamat', '$telepon', '$nilai_diskon', '$total_harga_setelah_diskon', 'Menunggu Konfirmasi')";
 
 if (mysqli_query($koneksi, $sql_pesanan)) {
   foreach ($harga_layanan as $id_layanan => $harga) {
