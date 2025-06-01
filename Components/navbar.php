@@ -42,7 +42,7 @@ $isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
         <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
             <div class="navbar-nav">
                 <a class="isi-nav nav-link" href="index.php">Home</a>
-                <a class="isi-nav nav-link" href="#services">Services</a>
+                <a class="isi-nav nav-link" href="layanan.php">Services</a>
                 <?php if (!isset($_SESSION['role']) || $_SESSION['role'] === 'Customer'): ?>
                     <!-- Tampilkan untuk guest dan customer -->
                     <a class="isi-nav nav-link" href="<?= $isLoggedIn ? 'booking.php' : 'login.php?redirect=booking' ?>">

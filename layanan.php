@@ -1,5 +1,6 @@
 <?php
-include 'koneksi.php';
+session_start();
+require_once 'koneksi.php';
 
 // Ambil semua layanan
 $query = mysqli_query($koneksi, "SELECT * FROM layanan");
@@ -13,7 +14,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM layanan");
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #f8f9fa;
+      background-color: #131312;
     }
 
     .card {
@@ -51,8 +52,10 @@ $query = mysqli_query($koneksi, "SELECT * FROM layanan");
 </head>
 <body>
 
-<div class="container py-5">
-  <h2 class="text-center mb-4">Layanan Tersedia</h2>
+<?php include 'Components/navbar.php'; ?>
+
+<div class="container py-5 mt-5">
+  <h2 class="text-center mb-4 text-white">Layanan Tersedia</h2>
   <div class="row g-4">
     <?php while ($row = mysqli_fetch_assoc($query)) : ?>
       <div class="col-md-4">
@@ -74,5 +77,8 @@ $query = mysqli_query($koneksi, "SELECT * FROM layanan");
   </div>
 </div>
 
+<?php include 'Components/footer.php'; ?>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
