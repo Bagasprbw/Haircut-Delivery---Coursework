@@ -46,7 +46,7 @@
             <br />kami memiliki semua yang Anda butuhkan untuk <br />tampil dan
             merasa percaya diri.
           </p>
-          <a class="btn btn-primary" href="#" role="button">VIEW ALL</a>
+          <a class="btn btn-primary" href="layanan.php" role="button">VIEW ALL</a>
           <!-- <a class="btn btn-primary" href="./Feature/simulasiPerhitungan.php" role="button">Hitung Simulasimu</a> -->
           <a class="btn btn-primary" href="simulasi_perhitungan.php" role="button">Hitung Simulasimu</a>
         </div>

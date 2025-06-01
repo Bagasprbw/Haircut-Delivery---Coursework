@@ -1,64 +1,71 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = htmlspecialchars($_POST['nama']);
-    $telepon = htmlspecialchars($_POST['telepon']);
-    $layanan = isset($_POST['layanan']) ? implode(', ', array_map('htmlspecialchars', $_POST['layanan'])) : 'Tidak ada layanan yang dipilih';
-    $layanan_tambahan = isset($_POST['layanan_tambahan']) ? implode(', ', array_map('htmlspecialchars', $_POST['layanan_tambahan'])) : 'Tidak ada layanan tambahan yang dipilih'; // Menambahkan layanan tambahan
-    $barber = htmlspecialchars($_POST['barber']);
-    $tanggal = htmlspecialchars($_POST['tanggal']);
-    $waktu = htmlspecialchars($_POST['waktu']);
-    $catatan = htmlspecialchars($_POST['catatan']);
-    $pembayaran = htmlspecialchars($_POST['pembayaran']);
+session_start();
+include 'koneksi.php';
+
+// Cek apakah user sudah login
+if (!isset($_SESSION['id_user'])) {
+  echo "<script>alert('Silakan login terlebih dahulu.'); window.location.href='login.php';</script>";
+  exit;
+}
+
+$id_user = $_SESSION['id_user'];
+
+// Fungsi untuk generate ID acak
+function generateId($prefix = 'PS') {
+  return $prefix . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
+}
+
+// Ambil data dari form
+$nama       = $_POST['nama'];
+$telepon    = $_POST['telepon'];
+$tanggal    = $_POST['tanggal'];
+$diskon     = $_POST['diskon'];
+$catatan    = $_POST['catatan'];
+$pembayaran = $_POST['pembayaran'];
+
+$layanan_utama     = $_POST['layanan'] ?? [];
+$layanan_tambahan  = $_POST['layanan_tambahan'] ?? [];
+
+$semua_layanan = array_merge($layanan_utama, $layanan_tambahan);
+
+// Hitung total harga dari layanan
+$total_harga = 0;
+$harga_layanan = [];
+
+foreach ($semua_layanan as $nama_layanan) {
+  $query = mysqli_query($koneksi, "SELECT id_layanan, harga_layanan FROM layanan WHERE nama_layanan = '$nama_layanan' LIMIT 1");
+  $data = mysqli_fetch_assoc($query);
+  if ($data) {
+    $id_layanan = $data['id_layanan'];
+    $harga_layanan[$id_layanan] = $data['harga_layanan'];
+    $total_harga += $data['harga_layanan'];
+  }
+}
+
+// Kurangi diskon
+$total_harga -= intval($diskon);
+if ($total_harga < 0) $total_harga = 0;
+
+// Simpan ke tabel pesanan
+$id_pesanan = generateId('PS');
+$sql_pesanan = "INSERT INTO pesanan 
+  (id_pesanan, id_user, waktu, nama, alamat, telp, diskon, total_harga, status_pesanan) 
+  VALUES 
+  ('$id_pesanan', '$id_user', '$tanggal', '$nama', '', '$telepon', '$diskon', '$total_harga', 'Menunggu Konfirmasi')";
+
+if (mysqli_query($koneksi, $sql_pesanan)) {
+  // Masukkan ke tabel detail_pesanan
+  foreach ($harga_layanan as $id_layanan => $harga) {
+    $id_detail = generateId('D');
+    $sql_detail = "INSERT INTO detail_pesanan 
+      (id_detail_pesanan, id_pesanan, id_layanan, harga) 
+      VALUES 
+      ('$id_detail', '$id_pesanan', '$id_layanan', '$harga')";
+    mysqli_query($koneksi, $sql_detail);
+  }
+
+  echo "<script>alert('Booking berhasil!'); window.location.href='pesanan_saya.php';</script>";
+} else {
+  echo "Gagal menyimpan booking: " . mysqli_error($koneksi);
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hasil Pemesanan</title>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <style>
-        body {
-            background-color: rgb(91, 91, 91);
-        }
-        li {
-            margin-bottom: 10px;
-            list-style: none;
-        }
-        .container {
-            max-width: 800px;
-            margin-top: 50px;
-        }
-    </style>
-</head>
-<body class="">
-
-<!-- Navbar -->
-<?php require_once('Components/navbar.php'); ?>
-
-<div class="container bg-white p-4 rounded shadow-sm">
-    <h2 class="text-center mb-4">Hasil Pemesanan Barbershop</h2>
-    <ul>
-        <li><strong>Nama:</strong> <?php echo $nama; ?></li>
-        <li><strong>Telepon:</strong> <?php echo $telepon; ?></li>
-        <li><strong>Layanan yang Dipilih:</strong> <?php echo $layanan; ?></li>
-        <li><strong>Layanan Tambahan yang Dipilih:</strong> <?php echo $layanan_tambahan; ?></li> <!-- Menampilkan layanan tambahan -->
-        <li><strong>Barberman:</strong> <?php echo $barber; ?></li>
-        <li><strong>Tanggal:</strong> <?php echo $tanggal; ?></li>
-        <li><strong>Waktu:</strong> <?php echo $waktu; ?></li>
-        <li><strong>Catatan Tambahan:</strong> <?php echo $catatan; ?></li>
-        <li><strong>Metode Pembayaran:</strong> <?php echo $pembayaran; ?></li>
-    </ul>
-
-    <div class="text-center mt-4">
-        <a href="index.php" class="btn btn-primary">Kembali ke Halaman Utama</a>
-    </div>
-</div>
-
-<script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="JS/interaktif.js"></script>
-</body>
-</html>
