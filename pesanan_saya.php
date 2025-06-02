@@ -22,12 +22,13 @@ $pesanan_user = $koneksi->query("SELECT * FROM pesanan WHERE id_user = '$id_user
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
-<body>
+<body class="bg-light">
     <div class="container mt-5">
+        <a href="index.php" class="btn btn-success mb-3">Back to home..</a>
         <h2 class="mb-4">Pesanan Saya</h2>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
+        <div class="table-responsive bd-example">
+            <table class="table table-bordered align-middle">
                 <thead class="table-light">
                     <tr>
                         <th>No</th>
