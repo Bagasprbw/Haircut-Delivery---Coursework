@@ -2,6 +2,7 @@
     session_start();
     require_once 'koneksi.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -50,7 +51,7 @@
           <!-- <a class="btn btn-primary" href="./Feature/simulasiPerhitungan.php" role="button">Hitung Simulasimu</a> -->
           <a class="btn btn-primary" href="simulasi_perhitungan.php" role="button">Hitung Simulasimu</a>
         </div>
-        <div class="right w-50 row justify-content-center">
+        <div class="right w-50 row justify-content-end">
           <div class="card col-5 align-items-center py-3" style="border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);">
             <img src="./img/haircut-icon.png" alt="img1" class="mb-2" style="width: 35px; height: 35px;" />
             <h4 class="card-title fs-5">Haircut</h4>
@@ -86,7 +87,7 @@
     <!-- Works Container -->
     <div class="container my-5">
     <div class="text-center mb-4">
-        <h1 class="fw-bold">OUR WORKS</h1>
+        <h1 class="fw-bold">GALLERY</h1>
         <div style="height: 3px; width: 200px; background-color: #000; margin: 10px auto;"></div>
     </div>
 
@@ -112,6 +113,9 @@
             <div class="work-item">
                 <img src="./img/haircut5.jpg" alt="Haircut 5">
             </div>
+            <div class="work-item">
+                <img src="./Dashboard/data_gambar/img_683c47a63f6448.46137112.jpeg" alt="Haircut 5">
+            </div>
         </div>
 
         <button class="scroll-btn scroll-btn-right" onclick="scrollGallery(1)">
@@ -120,7 +124,7 @@
     </div>
 
     <!-- Image Upload Form -->
-    <div class="container mt-5">
+    <!-- <div class="container mt-5">
         <h3 class="text-center mb-4">Tambahkan Gambar</h3>
         <form id="imageUploadForm" class="mx-auto" style="max-width: 500px;">
             <div class="mb-3">
@@ -136,7 +140,7 @@
             </div>
         </form>
     </div>
-  </div>
+  </div> -->
   
     <!-- Product Container -->
     <div class="container d-flex justify-content-center align-items-center flex-column text-center my-5" id="product" style="height: 450px;">

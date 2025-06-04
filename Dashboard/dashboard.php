@@ -210,6 +210,7 @@
                     <i class="fas fa-user-circle me-1"></i> Admin
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="../index.php"><i class="fas fa-sign-out-alt me-2"></i> Landing Page</a></li>
                     <li><a class="dropdown-item" href="../logout.php"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
                 </ul>
             </div>

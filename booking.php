@@ -13,11 +13,12 @@ $layanan_tambahan = mysqli_query($koneksi, "SELECT * FROM layanan WHERE kategori
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Booking Haircut Delivery</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #808080;
       min-height: 100vh;
     }
     
@@ -28,7 +29,7 @@ $layanan_tambahan = mysqli_query($koneksi, "SELECT * FROM layanan WHERE kategori
     }
     
     .card-header {
-      background: linear-gradient(45deg, #667eea, #764ba2);
+      background: #131312;
       border-radius: 15px 15px 0 0 !important;
     }
     
@@ -43,7 +44,7 @@ $layanan_tambahan = mysqli_query($koneksi, "SELECT * FROM layanan WHERE kategori
     }
     
     .btn-primary {
-      background: linear-gradient(45deg, #667eea, #764ba2);
+      background: #131312;
       border: none;
       border-radius: 10px;
     }
@@ -60,14 +61,15 @@ $layanan_tambahan = mysqli_query($koneksi, "SELECT * FROM layanan WHERE kategori
     }
     
     .service-card.selected {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
+      background-image: linear-gradient(to bottom, #aeadcb, #9ba0d3, #8394db, #6089e3, #1280eb);      color: white;
     }
   </style>
 </head>
 <body>
 
-<div class="container py-5">
+<?php include 'Components/navbar.php'; ?>
+
+<div class="container py-5 mt-5">
   <div class="row justify-content-center">
     <div class="col-lg-10">
       <div class="card">
@@ -218,6 +220,8 @@ $layanan_tambahan = mysqli_query($koneksi, "SELECT * FROM layanan WHERE kategori
     </div>
   </div>
 </div>
+
+<?php include 'Components/footer.php'; ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>

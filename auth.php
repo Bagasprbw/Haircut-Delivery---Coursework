@@ -1,7 +1,7 @@
 <?php
 if (!function_exists('requireRole')) {
     function requireRole($role) {
-        $loginPath = '/tugasUTS_V3424042/login.php';
+        $loginPath = 'login.php';
 
         if (!isset($_SESSION['role'])) {
             echo "<script>
