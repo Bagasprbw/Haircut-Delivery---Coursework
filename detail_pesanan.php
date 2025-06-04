@@ -71,21 +71,30 @@ function e($str) {
         <h2 class="invoice-title text-center">Detail Pesanan</h2>
 
         <div class="mb-4">
-            <strong>ID Pesanan:</strong> <?= e($pesanan['id_pesanan']) ?><br>
-            <strong>Tanggal:</strong> <?= date('d-m-Y', strtotime($pesanan['waktu'])) ?><br>
-            <strong>Status:</strong>
-            <?php
-                $statusClass = match ($pesanan['status_pesanan']) {
-                    'Belum dibayar' => 'bg-danger',
-                    'Menunggu Konfirmasi' => 'bg-warning text-dark',
-                    'Dikonfirmasi' => 'bg-info text-dark',
-                    'Diproses' => 'bg-primary',
-                    'Selesai' => 'bg-success',
-                    'Dibatalkan' => 'bg-secondary',
-                    default => 'bg-secondary',
-                };
-            ?>
-            <span class="badge <?= $statusClass ?>"><?= e($pesanan['status_pesanan']) ?></span>
+            <div class="d-flex justify-content-between mb-3">
+                <div class="p-2 bd-highlight">
+                    <strong>ID Pesanan:</strong> <?= e($pesanan['id_pesanan']) ?><br>
+                    <strong>Tanggal:</strong> <?= date('d-m-Y', strtotime($pesanan['waktu'])) ?><br>
+                    <strong>Status:</strong>
+                    <?php
+                        $statusClass = match ($pesanan['status_pesanan']) {
+                            'Belum dibayar' => 'bg-danger',
+                            'Menunggu Konfirmasi' => 'bg-warning text-dark',
+                            'Dikonfirmasi' => 'bg-info text-dark',
+                            'Diproses' => 'bg-primary',
+                            'Selesai' => 'bg-success',
+                            'Dibatalkan' => 'bg-secondary',
+                            default => 'bg-secondary',
+                        };
+                    ?>
+                    <span class="badge <?= $statusClass ?>"><?= e($pesanan['status_pesanan']) ?></span>
+                </div>
+                <div class="p-2 bd-highlight">
+                    <strong>Customer:</strong> <?= e($pesanan['nama']) ?><br>
+                    <strong>Alamat:</strong> <?= e($pesanan['alamat']) ?><br>
+                    <strong>Telp:</strong> <?= e($pesanan['telp']) ?><br>
+                </div>
+            </div>
         </div>
 
         <table class="table table-bordered">
