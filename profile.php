@@ -334,7 +334,7 @@ if ($_POST) {
                             <div class="stats-icon bg-success text-white mx-auto">
                                 <i class="fas fa-hourglass-half"></i>
                             </div>
-                            <h3 class="mb-1"><?= $pesanan_selesai ?></h3>
+                            <h3 class="mb-1"><?= $pesanan_menunggu_konfirmasi ?></h3>
                             <p class="text-muted mb-0">Menunggu Konfirmasi</p>
                         </div>
                     </div>
