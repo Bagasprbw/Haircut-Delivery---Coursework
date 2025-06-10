@@ -34,7 +34,7 @@
             $user = $result->fetch_assoc();
 
             // Bandingkan password secara langsung (jika belum pakai password_hash)
-            if ($password === $user['password']) {
+            if (password_verify($password, $user['password'])) {
                 session_regenerate_id(true);
                 $_SESSION['id_user'] = $user['id_user'];
                 $_SESSION['nama'] = $user['nama'];

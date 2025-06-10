@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $telp     = $_POST['telp'];
     $alamat   = $_POST['alamat'];
     $username = $_POST['username'];
-    $password = $_POST['password'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role     = 'customer'; // default role
 
     // ==== GENERATE KODE PRODUK ====
