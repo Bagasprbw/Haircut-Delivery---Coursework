@@ -5,15 +5,13 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* font: inherit; */
 }
 
 /* Hero Section */
 .hero-section {
     background-color: #e9ecef;
-    /* padding: 100px 0; */
-    /* text-align: center; */
 }
+
 .backgorund {
     background-image: url('../img/bg-barber.jpg');
     background-size: cover;
@@ -29,28 +27,177 @@ body {
     font-weight: 700;
 }
 
-.hero-section .left .services-title {
-    font-size: 3rem;
+/* Custom CSS */
+#services {
+    min-height: 550px;
+    padding: 3rem 1rem;
+}
+
+.services-title {
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
+    line-height: 1.2;
+}
+
+.line {
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: #007bff;
+    margin: 1rem 0;
+}
+
+.services-text {
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    line-height: 1.6;
+    margin-bottom: 2rem;
 }
 
 .btn-primary {
     background-color: #007bff;
     border-color: #007bff;
-    padding: 10px 20px;
+    padding: 12px 24px;
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    margin: 0.25rem;
+    white-space: nowrap;
+}
+
+.service-card {
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    padding: 1.5rem 1.5rem;
+    margin-bottom: 1rem;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.service-card img {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+
+.service-card h4 {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.service-card p {
     font-size: 1rem;
-}
-
-.card {
-    width: 200px;
-    height: 180px;
-    margin: 10px;
-}
-
-.right .card p {
-    font-size: 0.8rem !important;
+    line-height: 1.4;
+    margin: 0;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
     overflow: scroll;
     scrollbar-width: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    #services {
+        padding: 2rem 1rem;
+    }
+    .service-card {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    #services {
+        min-height: auto;
+        padding: 3rem 1rem;
+    }
+    .left-content {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    .services-title {
+        margin-bottom: 1.5rem;
+    }
+    .line {
+        margin: 1.5rem auto;
+    }
+    .btn-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    #services {
+        padding: 2rem 0.75rem;
+    }
+    .services-text br {
+        display: none;
+    }
+    .btn-primary {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        width: 100%;
+        max-width: 200px;
+        margin: 0.25rem 0;
+    }
+    .service-card {
+        padding: 1.25rem 0.75rem;
+    }
+    .service-card p {
+        -webkit-line-clamp: 3;
+    }
+}
+
+@media (max-width: 576px) {
+    #services {
+        padding: 1.5rem 0.5rem;
+    }
+    .services-title {
+        text-align: center;
+    }
+    .btn-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .btn-primary {
+        max-width: 250px;
+    }
+}
+
+/* Animation for smooth transitions */
+.left-content,
+.service-card {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.service-card:nth-child(1) { animation-delay: 0.1s; }
+.service-card:nth-child(2) { animation-delay: 0.2s; }
+.service-card:nth-child(3) { animation-delay: 0.3s; }
+.service-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .pic-wrap {
@@ -85,54 +232,83 @@ body {
 .col .product-card p {
     font-size: 0.95rem !important;
     scrollbar-width: none;
-    height: 50px; /* Sesuaikan tinggi yang diinginkan */
+    height: 50px;
     overflow-y: auto;
     word-break: break-word;
 }
 /* Hero Section End */
 
-
-.works-container {
-    display: flex;
-    overflow-x: auto;
-    gap: 15px;
-    padding: 20px 0;
-    scroll-behavior: smooth;
-}
-.works-container::-webkit-scrollbar {
-    display: none;
-}
-.work-item {
-    flex: 0 0 auto;
-    width: 210px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease;
-}
-.work-item:hover {
-    transform: scale(1.05);
-}
-.work-item img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-.scroll-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    z-index: 10;
-}
-.scroll-btn-left {
-    left: 0;
-}
-.scroll-btn-right {
-    right: 0;
-}
+/* Gallery Styles */
 .gallery-container {
     position: relative;
+    overflow: hidden;
+    padding: 20px 0;
+    margin: 30px 0;
+}
+
+.gallery-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 15px;
+    gap: 15px;
+}
+
+.gallery-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.gallery-item {
+    flex: 0 0 calc(20% - 12px);
+    min-width: 150px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.gallery-item img:hover {
+    transform: scale(1.03);
+}
+
+.auto-scroll-indicator {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1200px) {
+    .gallery-item {
+        flex: 0 0 calc(25% - 12px);
+    }
+}
+
+@media (max-width: 992px) {
+    .gallery-item {
+        flex: 0 0 calc(33.33% - 12px);
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery-item {
+        flex: 0 0 calc(50% - 10px);
+    }
+    
+    .gallery-item img {
+        height: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .gallery-item {
+        flex: 0 0 calc(100% - 10px);
+    }
 }
