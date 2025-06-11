@@ -14,6 +14,25 @@
         $total_pendapatan_pembelian = $koneksi->query("SELECT SUM(total_harga) AS total FROM pembelian WHERE status_pembelian = 'Selesai'")->fetch_assoc()['total'] ?? 0;
     ?>
 
+    <?php
+        $pendapatan_harian = [];
+        $result = $koneksi->query("
+            SELECT DATE(waktu) AS tanggal, SUM(total_harga) AS total
+            FROM pesanan 
+            WHERE status_pesanan = 'Selesai'
+            GROUP BY DATE(waktu)
+            ORDER BY tanggal ASC
+        ");
+
+        while ($row = $result->fetch_assoc()) {
+            $pendapatan_harian[] = [
+                'tanggal' => $row['tanggal'],
+                'total' => (int)$row['total'],
+            ];
+        }
+    ?>
+
+
 
     <!DOCTYPE html>
     <html lang="en">
@@ -144,6 +163,7 @@
                 }
             }
         </style>
+        
     </head>
     <body>
         <!-- Sidebar -->
@@ -308,12 +328,10 @@
                     <div class="col-lg-8 mb-4">
                         <div class="card h-100">
                             <div class="card-header">
-                                <h5 class="card-title mb-0">Orders Over Time</h5>
+                                <h5 class="card-title mb-0">Chart Income</h5>
                             </div>
                             <div class="card-body">
-                                <div class="text-center py-5 text-muted">
-                                    Chart will be displayed here
-                                </div>
+                                <canvas id="chartPendapatan" height="120"></canvas>
                             </div>
                         </div>
                     </div>
@@ -347,6 +365,54 @@
             document.getElementById('overlay').addEventListener('click', function() {
                 document.getElementById('sidebar').classList.remove('active');
                 document.getElementById('overlay').classList.remove('active');
+            });
+        </script>
+        <!-- Chart.js CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const pendapatanData = <?= json_encode($pendapatan_harian); ?>;
+
+            const labels = pendapatanData.map(item => item.tanggal);
+            const data = pendapatanData.map(item => item.total);
+
+            const ctx = document.getElementById('chartPendapatan').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Pendapatan Booking',
+                        data: data,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'Rp ' + value.toLocaleString('id-ID');
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Rp ' + context.parsed.y.toLocaleString('id-ID');
+                                }
+                            }
+                        }
+                    }
+                }
             });
         </script>
     </body>
