@@ -116,16 +116,18 @@ require_once 'koneksi.php';
             <div class="gallery-container">
                 <div class="gallery-scroll" id="galleryScroll">
                     <!-- Items will be added by JavaScript -->
-                </div>
+                </div>  
             </div>
         </div>
 
 
         <!-- Product Container -->
-        <div class="container d-flex justify-content-center align-items-center flex-column text-center my-5" id="product" style="height: 450px;">
-            <h1 class="fw-bold">OUR PRODUCT</h1>
-            <span style="height: 3px; width: 200px; background-color: #000;"></span>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mt-4 justify-content-center">
+<div class="container-fluid bg-light">
+        <div class="container d-flex justify-content-center align-items-center flex-column text-center product-section" id="product">
+            <h1 class="fw-bold mb-3">OUR PRODUCT</h1>
+            <div class="section-divider"></div>
+            
+            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-3 g-md-4 mt-2 mt-md-4 justify-content-center w-100 row-equal-height">
                 <div class="col">
                     <div class="product-card p-3">
                         <img src="img/pomade.png" alt="Pomade">
@@ -142,21 +144,23 @@ require_once 'koneksi.php';
                 </div>
                 <div class="col">
                     <div class="product-card p-3">
-                        <img src="img/hairpowder.png" alt="Hair Powder">
+                        <img src="img/hairPowder.png" alt="Hair Powder">
                         <h5 class="fw-bold">HAIR POWDER</h5>
-                        <p> Volume instan tanpa rasa berat. Solusi cepat untuk rambut lebih tebal, fresh, dan bervolume sepanjang hari.</p>
+                        <p>Volume instan tanpa rasa berat. Solusi cepat untuk rambut lebih tebal, fresh, dan bervolume sepanjang hari.</p>
                     </div>
                 </div>
                 <div class="col">
                     <div class="product-card p-3">
-                        <img src="img/hairtonic.png" alt="Hair Tonic">
+                        <img src="img/hairTonic.png" alt="Hair Tonic">
                         <h5 class="fw-bold">HAIR TONIC</h5>
                         <p>Nutrisi untuk rambut dan kulit kepala. Menyegarkan, menyehatkan, dan menjaga rambut tetap kuat serta mudah diatur.</p>
                     </div>
                 </div>
             </div>
-            <button class="btn btn-dark mt-4 px-4 py-2 rounded-pill">VIEW ALL</button>
+            
+            <button class="btn btn-dark mt-3 mt-md-4 px-4 py-2 rounded-pill">VIEW ALL</button>
         </div>
+    </div>
         <!-- End Section -->
     </section>
 
