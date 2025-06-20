@@ -58,7 +58,7 @@ $isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
             <div class="d-flex align-items-center">
                 <?php if (!$isLoggedIn): ?>
                     <div class="navbar-nav">
-                        <a class="isi-nav nav-link" href="login.php">Login</a>
+                        <a class="isi-nav nav-link mt-1" href="login.php">Login</a>
                         <a class="isi-nav nav-link register btn btn-primary" href="register.php">Register</a>
                     </div>
                 <?php else: ?>

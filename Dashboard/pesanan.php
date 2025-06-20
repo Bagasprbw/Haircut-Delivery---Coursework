@@ -23,6 +23,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        
         <style>
             :root {
                 --sidebar-width: 250px;
@@ -272,12 +273,12 @@
                 <!-- nav dan tab -->
                 <div class="row mt-4 mb-4">
                     <nav class="nav nav-underline nav-fill">
-                        <a class="nav-link active" aria-current="page" href="#">All</a>
-                        <!-- <a class="nav-link text-dark" href="#">Menunggu Konfirmasi <span class="badge text-bg-danger">4</span></a>
-                        <a class="nav-link text-dark" href="#">Menunggu Proses <span class="badge text-bg-danger">4</span></a>
-                        <a class="nav-link text-dark" href="#">Sedang Diproses <span class="badge text-bg-danger">4</span></a> -->
-                        <a class="nav-link text-success" href="#">Selesai </a>
-                        <a class="nav-link text-danger" href="#">Dibatalkan </a>
+                        <a class="nav-link filter-link" aria-current="page" href="#">All</a>
+                        <a class="nav-link text-dark filter-link" data-status="Menunggu Konfirmasi" href="#">Menunggu Konfirmasi <span class="badge text-bg-danger">4</span></a>
+                        <a class="nav-link text-dark filter-link" data-status="Dikonfirmasi" href="#">Menunggu Proses <span class="badge text-bg-danger">4</span></a>
+                        <a class="nav-link text-dark filter-link" data-status="Diproses" href="#">Sedang Diproses <span class="badge text-bg-success">4</span></a>
+                        <a class="nav-link text-success filter-link" data-status="Selesai" href="#">Selesai </a>
+                        <a class="nav-link text-danger filter-link" data-status="Dibatalkan" href="#">Dibatalkan </a>
                     </nav><hr>
                 </div>
                 
@@ -302,49 +303,8 @@
                                         <th>Detail</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php $no = 1; while ($row = $pesanan_list->fetch_assoc()): ?>
-                                        <tr>
-                                            <td><?= $no++ ?></td>
-                                            <td><?= htmlspecialchars($row['nama_user']) ?></td>
-                                            <td><?= date('d-m-Y', strtotime($row['waktu'])) ?></td>
-                                            <td><?= htmlspecialchars($row['telp']) ?></td>
-                                            <td><?= htmlspecialchars($row['alamat']) ?></td>
-                                            <td>Rp <?= number_format($row['total_harga'], 0, ',', '.') ?></td>
-                                            <td>
-                                                <?php
-                                                    $status = $row['status_pesanan'];
-                                                    $badge = 'secondary';
-                                                    if ($status == 'Selesai') $badge = 'success';
-                                                    elseif ($status == 'Diproses') $badge = 'info';
-                                                    elseif ($status == 'Dibatalkan') $badge = 'danger';
-                                                    elseif ($status == 'Menunggu Konfirmasi') $badge = 'warning';
-                                                    elseif ($status == 'Dikonfirmasi') $badge = 'primary';
-                                                ?>
-                                                <span class="badge bg-<?= $badge ?>"><?= $status ?></span>
-                                            </td>
-                                            <td>
-                                                <?php if ($status == 'Menunggu Konfirmasi'): ?>
-                                                    <a href="Controller/pesanan_controller.php?id=<?= $row['id_pesanan'] ?>&aksi=konfirmasi" class="btn btn-sm btn-primary" onclick="return confirm('Yakin ingin konfirmasi pesanan ini?')">Konfirmasi</a>
-                                                <?php elseif ($status == 'Dikonfirmasi'): ?>
-                                                    <a href="Controller/pesanan_controller.php?id=<?= $row['id_pesanan'] ?>&aksi=proses" class="btn btn-sm btn-info" onclick="return confirm('Yakin ingin memproses pesanan ini?')">Proses</a>
-                                                <?php elseif ($status == 'Diproses'): ?>
-                                                    <a href="Controller/pesanan_controller.php?id=<?= $row['id_pesanan'] ?>&aksi=selesai" class="btn btn-sm btn-success" onclick="return confirm('Yakin ingin menyelesaikan pesanan ini?')">Pesanan Selesai</a>
-                                                <?php endif; ?>
-
-                                                <!-- Tombol Cancel selalu tampil -->
-                                                <?php if (!in_array($status, ['Selesai', 'Dibatalkan'])): ?>
-                                                    <a href="Controller/pesanan_controller.php?id=<?= $row['id_pesanan'] ?>&aksi=batal" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin membatalkan pesanan ini?')">Cancel</a>
-                                                <?php endif; ?>
-                                            </td>
-
-                                            <td>
-                                                <a href="detail_pesanan.php?id=<?= $row['id_pesanan'] ?>" class="btn btn-sm btn-outline-success" title="Lihat Detail">
-                                                    <i class="fas fa-eye"></i> Detail
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <?php endwhile; ?>
+                                <tbody id="pesanan-body">
+                                    <!-- otomatis oleh ajax -->
                                 </tbody>
                             </table>
                         </div>
@@ -367,6 +327,74 @@
             document.getElementById('overlay').addEventListener('click', function() {
                 document.getElementById('sidebar').classList.remove('active');
                 document.getElementById('overlay').classList.remove('active');
+            });
+        </script>
+        <script>
+            document.querySelectorAll('.filter-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const status = this.getAttribute('data-status') || 'All';
+
+                    fetch(`filter_pesanan.php?status=${encodeURIComponent(status)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const tbody = document.getElementById('pesanan-body');
+                            tbody.innerHTML = '';
+
+                            if (data.length === 0) {
+                                tbody.innerHTML = '<tr><td colspan="9" class="text-center">Tidak ada pesanan.</td></tr>';
+                                return;
+                            }
+
+                            let no = 1;
+                            data.forEach(row => {
+                                let badge = 'secondary';
+                                if (row.status_pesanan === 'Selesai') badge = 'success';
+                                else if (row.status_pesanan === 'Diproses') badge = 'info';
+                                else if (row.status_pesanan === 'Dibatalkan') badge = 'danger';
+                                else if (row.status_pesanan === 'Menunggu Konfirmasi') badge = 'warning';
+                                else if (row.status_pesanan === 'Dikonfirmasi') badge = 'primary';
+
+                                let actions = '';
+                                if (row.status_pesanan === 'Menunggu Konfirmasi') {
+                                    actions += `<a href="Controller/pesanan_controller.php?id=${row.id_pesanan}&aksi=konfirmasi" class="btn btn-sm btn-primary" onclick="return confirm('Yakin ingin konfirmasi pesanan ini?')">Konfirmasi</a> `;
+                                } else if (row.status_pesanan === 'Dikonfirmasi') {
+                                    actions += `<a href="Controller/pesanan_controller.php?id=${row.id_pesanan}&aksi=proses" class="btn btn-sm btn-info" onclick="return confirm('Yakin ingin memproses pesanan ini?')">Proses</a> `;
+                                } else if (row.status_pesanan === 'Diproses') {
+                                    actions += `<a href="Controller/pesanan_controller.php?id=${row.id_pesanan}&aksi=selesai" class="btn btn-sm btn-success" onclick="return confirm('Yakin ingin menyelesaikan pesanan ini?')">Pesanan Selesai</a> `;
+                                }
+
+                                if (!['Selesai', 'Dibatalkan'].includes(row.status_pesanan)) {
+                                    actions += `<a href="Controller/pesanan_controller.php?id=${row.id_pesanan}&aksi=batal" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin membatalkan pesanan ini?')">Cancel</a>`;
+                                }
+
+                                tbody.innerHTML += `
+                                    <tr>
+                                        <td>${no++}</td>
+                                        <td>${row.nama_user}</td>
+                                        <td>${new Date(row.waktu).toLocaleDateString('id-ID')}</td>
+                                        <td>${row.telp}</td>
+                                        <td>${row.alamat}</td>
+                                        <td>Rp ${parseInt(row.total_harga).toLocaleString('id-ID')}</td>
+                                        <td><span class="badge bg-${badge}">${row.status_pesanan}</span></td>
+                                        <td>${actions}</td>
+                                        <td>
+                                            <a href="detail_pesanan.php?id=${row.id_pesanan}" class="btn btn-sm btn-outline-success">
+                                                <i class="fas fa-eye"></i> Detail
+                                            </a>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data:', error);
+                        });
+                });
+            });
+            // Setelah DOM selesai dimuat, otomatis klik link "All"
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelector('.filter-link[aria-current="page"]').click();
             });
         </script>
     </body>

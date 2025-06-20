@@ -14,6 +14,27 @@ require_once 'koneksi.php';
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="CSS/style.css" />
+    <!-- STYLING RATING -->
+        <style>
+        .rating {
+            direction: rtl;
+            display: flex;
+            gap: 5px;
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            font-size: 1.5rem;
+            color: #ccc;
+            cursor: pointer;
+        }
+        .rating input:checked ~ label,
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #ffc107;
+        }
+        </style>
 </head>
 
 <body>
@@ -122,45 +143,141 @@ require_once 'koneksi.php';
 
 
         <!-- Product Container -->
-<div class="container-fluid bg-light">
-        <div class="container d-flex justify-content-center align-items-center flex-column text-center product-section" id="product">
-            <h1 class="fw-bold mb-3">OUR PRODUCT</h1>
-            <div class="section-divider"></div>
-            
-            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-3 g-md-4 mt-2 mt-md-4 justify-content-center w-100 row-equal-height">
-                <div class="col">
-                    <div class="product-card p-3">
-                        <img src="img/pomade.png" alt="Pomade">
-                        <h5 class="fw-bold">POMADE</h5>
-                        <p>Rahasia gaya rambut sleek dan rapi dengan kilau elegan. Cocok untuk slick back, side part, hingga pompadour.</p>
+        <div class="container-fluid bg-light">
+            <div class="container d-flex justify-content-center align-items-center flex-column text-center product-section" id="product">
+                <h1 class="fw-bold mb-3">OUR PRODUCT</h1>
+                <div class="section-divider"></div>
+                
+                <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-3 g-md-4 mt-2 mt-md-4 justify-content-center w-100 row-equal-height">
+                    <div class="col">
+                        <div class="product-card p-3">
+                            <img src="img/pomade.png" alt="Pomade">
+                            <h5 class="fw-bold">POMADE</h5>
+                            <p>Rahasia gaya rambut sleek dan rapi dengan kilau elegan. Cocok untuk slick back, side part, hingga pompadour.</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="product-card p-3">
+                            <img src="img/clay.png" alt="Clay">
+                            <h5 class="fw-bold">CLAY</h5>
+                            <p>Tekstur matte, daya rekat tinggi, dan hasil natural. Ideal untuk tampilan messy atau textured crop yang effortless.</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="product-card p-3">
+                            <img src="img/hairPowder.png" alt="Hair Powder">
+                            <h5 class="fw-bold">HAIR POWDER</h5>
+                            <p>Volume instan tanpa rasa berat. Solusi cepat untuk rambut lebih tebal, fresh, dan bervolume sepanjang hari.</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="product-card p-3">
+                            <img src="img/hairTonic.png" alt="Hair Tonic">
+                            <h5 class="fw-bold">HAIR TONIC</h5>
+                            <p>Nutrisi untuk rambut dan kulit kepala. Menyegarkan, menyehatkan, dan menjaga rambut tetap kuat serta mudah diatur.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="product-card p-3">
-                        <img src="img/clay.png" alt="Clay">
-                        <h5 class="fw-bold">CLAY</h5>
-                        <p>Tekstur matte, daya rekat tinggi, dan hasil natural. Ideal untuk tampilan messy atau textured crop yang effortless.</p>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="product-card p-3">
-                        <img src="img/hairPowder.png" alt="Hair Powder">
-                        <h5 class="fw-bold">HAIR POWDER</h5>
-                        <p>Volume instan tanpa rasa berat. Solusi cepat untuk rambut lebih tebal, fresh, dan bervolume sepanjang hari.</p>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="product-card p-3">
-                        <img src="img/hairTonic.png" alt="Hair Tonic">
-                        <h5 class="fw-bold">HAIR TONIC</h5>
-                        <p>Nutrisi untuk rambut dan kulit kepala. Menyegarkan, menyehatkan, dan menjaga rambut tetap kuat serta mudah diatur.</p>
-                    </div>
-                </div>
+                
+                <button class="btn btn-dark mt-3 mt-md-4 px-4 py-2 rounded-pill">VIEW ALL</button>
             </div>
-            
-            <button class="btn btn-dark mt-3 mt-md-4 px-4 py-2 rounded-pill">VIEW ALL</button>
         </div>
-    </div>
+        <!-- ULASAN SECTION -->
+        <?php
+        // Ambil ulasan dari database
+        $queryUlasan = mysqli_query($koneksi, "SELECT u.pesan, u.rating, u.tanggal, us.nama FROM ulasan u JOIN user us ON u.id_user = us.id_user ORDER BY u.tanggal DESC LIMIT 5");
+        ?>
+
+        <?php
+            if (isset($_SESSION['ulasan_status'])) {
+                echo '<div class="container mt-4">';
+                if ($_SESSION['ulasan_status'] === 'berhasil') {
+                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            Terima kasih! Ulasan Anda telah dikirim.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                } elseif ($_SESSION['ulasan_status'] === 'gagal') {
+                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            Maaf, terjadi kesalahan saat menyimpan ulasan Anda.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                }
+                echo '</div>';
+                unset($_SESSION['ulasan_status']); // Hapus agar tidak muncul terus
+            }
+        ?>
+
+        <div class="container my-5" id="ulasan">
+            <div class="text-center mb-4">
+                <h1 class="fw-bold">Testimony</h1>
+                <div style="height: 3px; width: 200px; background-color: #000; margin: 10px auto;"></div>
+            </div>
+
+            <div class="row justify-content-center">
+                <?php while ($ulasan = mysqli_fetch_assoc($queryUlasan)) : ?>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card shadow-sm p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong><?= htmlspecialchars($ulasan['nama']) ?></strong>
+                                <small><?= date('d M Y', strtotime($ulasan['tanggal'])) ?></small>
+                            </div>
+                            <div class="text-warning mb-2">
+                                <?php for ($i = 0; $i < $ulasan['rating']; $i++) echo '<i class="fas fa-star"></i>'; ?>
+                                <?php for ($i = $ulasan['rating']; $i < 5; $i++) echo '<i class="far fa-star"></i>'; ?>
+                            </div>
+                            <p>"<?= htmlspecialchars($ulasan['pesan']) ?>"</p>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            </div>
+
+            <?php
+            // Tampilkan tombol beri ulasan jika user login dan punya pesanan yang selesai
+            if (isset($_SESSION['id_user'])) {
+                $id_user = $_SESSION['id_user'];
+                $cekSelesai = mysqli_query($koneksi, "SELECT * FROM pesanan WHERE id_user = '$id_user' AND status_pesanan = 'Selesai'");
+                if (mysqli_num_rows($cekSelesai) > 0) :
+            ?>
+                <div class="text-center mt-4">
+                    <button class="btn btn-dark mb-5 px-4 py-2 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalUlasan">Beri Ulasan</button>
+                </div>
+            <?php endif;
+            } ?>
+        </div>
+
+        <!-- MODAL BERIKAN ULASAN -->
+        <div class="modal fade" id="modalUlasan" tabindex="-1" aria-labelledby="modalUlasanLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form action="Controller/ulasan_controller.php" method="POST" class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalUlasanLabel">Beri Ulasan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id_user" value="<?= $_SESSION['id_user'] ?>">
+
+                        <div class="mb-3">
+                            <label class="form-label">Rating</label>
+                            <div class="rating">
+                                <?php for ($i = 5; $i >= 1; $i--) : ?>
+                                    <input type="radio" id="star<?= $i ?>" name="rating" value="<?= $i ?>" required>
+                                    <label for="star<?= $i ?>"><i class="fas fa-star"></i></label>
+                                <?php endfor; ?>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="pesan" class="form-label">Pesan</label>
+                            <textarea name="pesan" id="pesan" class="form-control" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Kirim Ulasan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- End Section -->
     </section>
 

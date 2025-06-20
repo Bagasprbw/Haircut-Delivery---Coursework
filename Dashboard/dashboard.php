@@ -325,26 +325,13 @@
                 
                 <!-- Charts Row -->
                 <div class="row">
-                    <div class="col-lg-8 mb-4">
+                    <div class="col-lg-12 mb-4">
                         <div class="card h-100">
                             <div class="card-header">
                                 <h5 class="card-title mb-0">Chart Income</h5>
                             </div>
                             <div class="card-body">
                                 <canvas id="chartPendapatan" height="120"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Last 7 Days Sales</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center py-5 text-muted">
-                                    Sales summary will be displayed here
-                                </div>
                             </div>
                         </div>
                     </div>
