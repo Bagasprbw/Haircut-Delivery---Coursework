@@ -52,7 +52,7 @@ $isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
                         <?php endif; ?> -->
                     </a>
                 <?php endif; ?>
-                <a class="isi-nav nav-link" href="#product">Product Catalog</a>
+                <a class="isi-nav nav-link" href="produk.php">Product Catalog</a>
             </div>
             <!-- Menu di ujung kanan (login/register atau profil) -->
             <div class="d-flex align-items-center">

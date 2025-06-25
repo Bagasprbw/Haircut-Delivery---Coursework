@@ -60,25 +60,25 @@
                     <div class="row mb-3">
                         <div class="col">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control shadow" id="name" name="nama" placeholder="Enter your name">
+                            <input type="text" class="form-control shadow" id="name" name="nama" placeholder="Enter your name" required autofocus>
                         </div>
                         <div class="col">
                             <label for="username" class="form-label">Username</label>
-                            <input type="username" class="form-control shadow" id="username" name="username" placeholder="Enter your username">
+                            <input type="username" class="form-control shadow" id="username" name="username" placeholder="Enter your username" required autofocus>
                             <div id="usernameFeedback" class="form-text text-danger"></div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control shadow" id="address" name="alamat" placeholder="Enter your address">
+                        <input type="text" class="form-control shadow" id="address" name="alamat" placeholder="Enter your address" required autofocus>
                     </div>
                     <div class="mb-3">
                             <label for="telp" class="form-label">Telp</label>
-                            <input type="tel" class="form-control shadow" id="telp" name="telp" placeholder="Enter your phone number">
+                            <input type="tel" class="form-control shadow" id="telp" name="telp" placeholder="Enter your phone number" required autofocus>
                         </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control shadow" id="password" name="password" placeholder="Enter your password">
+                        <input type="password" class="form-control shadow" id="password" name="password" placeholder="Enter your password" required autofocus>
                     </div>
                     <button type="submit" class="btn btn-dark w-100 mb-3">Sign Up</button>
                 </form>

@@ -34,6 +34,183 @@ require_once 'koneksi.php';
         .rating label:hover ~ label {
             color: #ffc107;
         }
+
+        /* Judul Section */
+        .title-line {
+            height: 3px;
+            width: 200px;
+            background-color: #000;
+            margin: 7px auto;
+        }
+
+        /* Rating Summary Card */
+        .rating-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            min-width: 250px;
+        }
+
+        .rating-score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stars-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .star-outer i {
+            color: #ddd;
+            font-size: 1.2rem;
+        }
+
+        .star-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 0%;
+        }
+
+        .star-inner i {
+            color: #ffc107;
+            font-size: 1.2rem;
+        }
+
+        .total-reviews {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            color: #444;
+        }
+
+        /* Rating Breakdown */
+        .rating-breakdown .rating-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rating-number {
+            width: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .progress {
+            flex: 1;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background-color: #ffc107;
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        /* Ulasan Kartu */
+        .review-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 1.2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .avatar-circle i {
+            color: white;
+            font-size: 1rem;
+        }
+
+        .user-info {
+            margin-left: 10px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .username {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .rating-stars {
+            font-size: 0.9rem;
+        }
+
+        .rating-stars .fa-star {
+            margin-right: 2px;
+        }
+
+        .text-warning {
+            color: #ffc107 !important;
+        }
+
+        .text-muted {
+            color: #ddd !important;
+        }
+
+        .review-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #555;
+            margin-bottom: 0;
+            text-align: left;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .rating-card {
+                min-width: 100%;
+                margin-bottom: 1rem;
+            }
+
+            .reviews-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
         </style>
 </head>
 
@@ -184,95 +361,146 @@ require_once 'koneksi.php';
         </div>
         <!-- ULASAN SECTION -->
         <?php
-        // Ambil ulasan dari database
-        $queryUlasan = mysqli_query($koneksi, "SELECT u.pesan, u.rating, u.tanggal, us.nama FROM ulasan u JOIN user us ON u.id_user = us.id_user ORDER BY u.tanggal DESC LIMIT 5");
+        // Ambil data rating dari database
+        $queryRating = mysqli_query($koneksi, "
+            SELECT rating, COUNT(*) as jumlah 
+            FROM ulasan 
+            GROUP BY rating
+            ORDER BY rating DESC
+        ");
+
+        $ratingData = [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
+        $totalRating = 0;
+        $totalCount = 0;
+
+        while ($row = mysqli_fetch_assoc($queryRating)) {
+            $star = intval($row['rating']);
+            $count = intval($row['jumlah']);
+            $ratingData[$star] = $count;
+            $totalRating += $star * $count;
+            $totalCount += $count;
+        }
+
+        $ratingAverage = $totalCount > 0 ? round($totalRating / $totalCount, 1) : 0;
         ?>
 
-        <?php
-            if (isset($_SESSION['ulasan_status'])) {
-                echo '<div class="container mt-4">';
-                if ($_SESSION['ulasan_status'] === 'berhasil') {
-                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                            Terima kasih! Ulasan Anda telah dikirim.
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>';
-                } elseif ($_SESSION['ulasan_status'] === 'gagal') {
-                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            Maaf, terjadi kesalahan saat menyimpan ulasan Anda.
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>';
-                }
-                echo '</div>';
-                unset($_SESSION['ulasan_status']); // Hapus agar tidak muncul terus
-            }
-        ?>
-
-        <div class="container my-5" id="ulasan">
-            <div class="text-center mb-4">
-                <h1 class="fw-bold">Testimony</h1>
-                <div style="height: 3px; width: 200px; background-color: #000; margin: 10px auto;"></div>
+        <div class="container my-5" id="reviews">
+            <div class="text-center mb-3">
+                <h1 class="fw-bold">CUSTOMER REVIEWS</h1>
+                <div class="title-line"></div>
             </div>
 
-            <div class="row justify-content-center">
-                <?php while ($ulasan = mysqli_fetch_assoc($queryUlasan)) : ?>
-                    <div class="col-md-6 col-lg-4 mb-3">
-                        <div class="card shadow-sm p-3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <strong><?= htmlspecialchars($ulasan['nama']) ?></strong>
-                                <small><?= date('d M Y', strtotime($ulasan['tanggal'])) ?></small>
+            <!-- Statistik Rating -->
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-10">
+                    <div class="reviews-stats d-flex flex-column flex-md-row align-items-center gap-4">
+                        <!-- Rata-rata Rating -->
+                        <div class="rating-card">
+                            <div class="rating-score"><?= $ratingAverage ?></div>
+                            <div class="stars-container">
+                                <div class="star-outer">
+                                    <?php for ($i = 0; $i < 5; $i++) echo '<i class="fas fa-star"></i>'; ?>
+                                    <div class="star-inner" style="width: <?= ($ratingAverage / 5) * 100 ?>%;">
+                                        <?php for ($i = 0; $i < 5; $i++) echo '<i class="fas fa-star"></i>'; ?>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="text-warning mb-2">
-                                <?php for ($i = 0; $i < $ulasan['rating']; $i++) echo '<i class="fas fa-star"></i>'; ?>
-                                <?php for ($i = $ulasan['rating']; $i < 5; $i++) echo '<i class="far fa-star"></i>'; ?>
+                            <div class="total-reviews"><?= number_format($totalCount) ?> ulasan</div>
+                        </div>
+
+                        <!-- Breakdown Rating -->
+                        <div class="rating-breakdown w-100">
+                            <?php foreach ($ratingData as $star => $count): 
+                                $percent = $totalCount > 0 ? ($count / $totalCount) * 100 : 0;
+                            ?>
+                            <div class="rating-row d-flex align-items-center mb-2">
+                                <span class="rating-number"><?= $star ?></span>
+                                <i class="fas fa-star text-warning mx-2"></i>
+                                <div class="progress flex-grow-1 me-2">
+                                    <div class="progress-bar" role="progressbar" style="width: <?= $percent ?>%;"></div>
+                                </div>
+                                <span class="rating-count"><?= $count ?></span>
                             </div>
-                            <p>"<?= htmlspecialchars($ulasan['pesan']) ?>"</p>
+                            <?php endforeach; ?>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Kartu Review -->
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center">
+                <?php
+                $reviewQuery = mysqli_query($koneksi, "
+                    SELECT u.pesan, u.rating, u.tanggal, us.nama 
+                    FROM ulasan u 
+                    JOIN user us ON u.id_user = us.id_user 
+                    ORDER BY u.tanggal DESC 
+                    LIMIT 8
+                ");
+                while ($r = mysqli_fetch_assoc($reviewQuery)) :
+                ?>
+                <div class="col">
+                    <div class="review-card h-100">
+                        <div class="review-header d-flex align-items-center mb-2">
+                            <div class="avatar-circle me-2">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-info">
+                                <div class="user-name"><?= htmlspecialchars($r['nama']) ?></div>
+                                <small class="username"><?= date('d M Y', strtotime($r['tanggal'])) ?></small>
+                            </div>
+                        </div>
+                        <div class="rating-stars mb-2">
+                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                <i class="fas fa-star <?= $i <= $r['rating'] ? 'text-warning' : 'text-muted' ?>"></i>
+                            <?php endfor; ?>
+                        </div>
+                        <p class="review-text">"<?= htmlspecialchars($r['pesan']) ?>"</p>
+                    </div>
+                </div>
                 <?php endwhile; ?>
             </div>
 
+            <!-- Tombol Beri Ulasan (jika user login & punya pesanan selesai) -->
             <?php
-            // Tampilkan tombol beri ulasan jika user login dan punya pesanan yang selesai
             if (isset($_SESSION['id_user'])) {
                 $id_user = $_SESSION['id_user'];
-                $cekSelesai = mysqli_query($koneksi, "SELECT * FROM pesanan WHERE id_user = '$id_user' AND status_pesanan = 'Selesai'");
-                if (mysqli_num_rows($cekSelesai) > 0) :
-            ?>
+                $cekSelesai = mysqli_query($koneksi, "SELECT 1 FROM pesanan WHERE id_user = '$id_user' AND status_pesanan = 'Selesai'");
+                if (mysqli_num_rows($cekSelesai) > 0): ?>
                 <div class="text-center mt-4">
-                    <button class="btn btn-dark mb-5 px-4 py-2 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalUlasan">Beri Ulasan</button>
+                    <button class="btn btn-dark px-4 py-2 mb-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalUlasan">
+                        Beri Ulasan
+                    </button>
                 </div>
-            <?php endif;
-            } ?>
+            <?php endif; } ?>
         </div>
 
-        <!-- MODAL BERIKAN ULASAN -->
+        <!-- Modal Ulasan -->
         <div class="modal fade" id="modalUlasan" tabindex="-1" aria-labelledby="modalUlasanLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <form action="Controller/ulasan_controller.php" method="POST" class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalUlasanLabel">Beri Ulasan</h5>
+                        <h5 class="modal-title">Beri Ulasan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id_user" value="<?= $_SESSION['id_user'] ?>">
-
                         <div class="mb-3">
                             <label class="form-label">Rating</label>
                             <div class="rating">
-                                <?php for ($i = 5; $i >= 1; $i--) : ?>
+                                <?php for ($i = 5; $i >= 1; $i--): ?>
                                     <input type="radio" id="star<?= $i ?>" name="rating" value="<?= $i ?>" required>
                                     <label for="star<?= $i ?>"><i class="fas fa-star"></i></label>
                                 <?php endfor; ?>
                             </div>
                         </div>
-
                         <div class="mb-3">
-                            <label for="pesan" class="form-label">Pesan</label>
-                            <textarea name="pesan" id="pesan" class="form-control" rows="3" required></textarea>
+                            <label class="form-label">Pesan</label>
+                            <textarea name="pesan" class="form-control" rows="3" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Kirim Ulasan</button>
+                        <button type="submit" class="btn btn-success">Kirim</button>
                     </div>
                 </form>
             </div>
